@@ -88,4 +88,11 @@ class Type extends CActiveRecord{
     public static function model($className = __CLASS__) {
         return parent::model($className);
     }
+
+    public function getTypeOptions() {
+        return CHtml::listData(Type::model()->findAll(), 'id', 'name');
+    }
+
+
+
 }
