@@ -6,6 +6,7 @@ class BookController extends Controller{
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/column2';
+    public $defaultAction = 'admin';
 
     /**
      * @return array action filters
@@ -62,7 +63,7 @@ class BookController extends Controller{
 //        $model->signed = 1;
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+         $this->performAjaxValidation($model);
 
         if (isset($_POST['Book'])) {
             $model->attributes = $_POST['Book'];
@@ -84,7 +85,7 @@ class BookController extends Controller{
         $model = $this->loadModel($id);
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+         $this->performAjaxValidation($model);
 
         if (isset($_POST['Book'])) {
             $model->attributes = $_POST['Book'];
@@ -142,7 +143,8 @@ class BookController extends Controller{
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = Book::model()->findByPk($id);
+//        $model = Book::model()->findByPk($id);
+        $model = Book::model()->with('authors')->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;

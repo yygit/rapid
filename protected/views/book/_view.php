@@ -13,6 +13,10 @@
 	<?php echo CHtml::encode($data->title); ?>
 	<br />
 
+    <b><?php echo CHtml::encode($data->getAttributeLabel('issue_number')); ?>:</b>
+	<?php echo CHtml::encode($data->issue_number); ?>
+	<br />
+
 	<b><?php echo CHtml::encode($data->getAttributeLabel('type_id')); ?>:</b>
 	<?php echo CHtml::encode($data->type_id); ?>
 	<br />

@@ -19,6 +19,21 @@
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css"/>
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css"/>
 
+    <?php
+    Yii::app()->clientScript->registerCoreScript('jquery');
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/detectmobilebrowser.js');
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/url_param_proc.js');
+    Yii::app()->clientScript->registerScript('detectmobilebrowser', "
+        if (isMobileBrowser(navigator.userAgent||navigator.vendor||window.opera)) {
+            var param_array = get_param_array();
+            if (!('mobile' in param_array)) {
+                param_array['mobile'] = 'on';
+                window.location.replace(get_base_uri() + build_query_string(param_array));
+            }
+        }
+    ", CClientScript::POS_READY);
+    ?>
+
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
@@ -39,6 +54,7 @@
                 'activateParents' => true,
                 'items' => array(
                     array('label' => 'Home', 'url' => array('/site/index')),
+                    array('label' => 'Turn on mobile view', 'url' => array('?mobile=on')),
                     //array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
                     //array('label'=>'Contact', 'url'=>array('/site/contact')),
                     array('label' => 'Login', 'url' => array('/site/login')),
@@ -50,6 +66,7 @@
                 'activateParents' => true,
                 'items' => array(
                     array('label' => 'Home', 'url' => array('/site/index')),
+                    array('label' => 'Turn on mobile view', 'url' => array('?mobile=on')),
                     array(
                         'label' => 'Comic Books',
                         'url' => array('/book'),

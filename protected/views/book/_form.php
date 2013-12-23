@@ -2,6 +2,9 @@
 /* @var $this BookController */
 /* @var $model Book */
 /* @var $form CActiveForm */
+
+/*var_dump(Type::model()->getTypeOptions());
+Yii::app()->end();*/
 ?>
 
 <div class="form">
@@ -12,7 +15,14 @@
         // controller action is handling ajax validation correctly.
         // There is a call to performAjaxValidation() commented in generated controller code.
         // See class documentation of CActiveForm for details on this.
-        'enableAjaxValidation' => false,
+        'enableClientValidation' => true,
+        'enableAjaxValidation' => true,
+        'clientOptions' => array(
+            'validateOnSubmit' => true,
+        ),
+        'htmlOptions' => array(
+            'data-ajax' => 'false',
+        ),
     )); ?>
 
     <p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -23,6 +33,12 @@
         <?php echo $form->labelEx($model, 'title'); ?>
         <?php echo $form->textField($model, 'title', array('size' => 60, 'maxlength' => 256)); ?>
         <?php echo $form->error($model, 'title'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model, 'issue_number'); ?>
+        <?php echo $form->textField($model, 'issue_number', array('size' => 20, 'maxlength' => 10)); ?>
+        <?php echo $form->error($model, 'issue_number'); ?>
     </div>
 
     <div class="row">
@@ -72,7 +88,7 @@
     <div class="row">
         <?php echo $form->labelEx($model, 'grade_id'); ?>
         <?php /*echo $form->textField($model, 'grade_id', array('size' => 10, 'maxlength' => 10)); */ ?>
-        <?php echo $form->dropDownList($model, 'type_id', Grade::model()->getTypeOptions()); ?>
+        <?php echo $form->dropDownList($model, 'grade_id', Grade::model()->getTypeOptions()); ?>
         <?php echo $form->error($model, 'grade_id'); ?>
     </div>
 

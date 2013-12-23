@@ -50,7 +50,7 @@ class Grade extends CActiveRecord{
     public function attributeLabels() {
         return array(
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Grade',
         );
     }
 
@@ -90,6 +90,6 @@ class Grade extends CActiveRecord{
     }
 
     public function getTypeOptions() {
-        return CHtml::listData(Grade::model()->findAll(), 'id', 'name');
+        return CMap::mergeArray(array('' => ''), CHtml::listData(Grade::model()->findAll(), 'id', 'name'));
     }
 }

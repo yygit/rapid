@@ -14,6 +14,7 @@
  * @property integer $signed
  * @property string $grade_id
  * @property integer $bagged
+ * @property string $issue_number
  *
  * The followings are the available model relations:
  * @property Type $type
@@ -37,14 +38,15 @@ class Book extends CActiveRecord{
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('title', 'required'),
-            array('signed, bagged', 'numerical', 'integerOnly' => true),
+            array('title, type_id, grade_id', 'required'),
+            array('signed, bagged, type_id, grade_id', 'numerical', 'integerOnly' => true),
             array('title', 'length', 'max' => 256),
+            array('issue_number', 'length', 'max' => 10),
             array('type_id, value, price, grade_id', 'length', 'max' => 10),
             array('publication_date, notes', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, title, type_id, publication_date, value, price, notes, signed, grade_id, bagged', 'safe', 'on' => 'search'),
+            array('id, title, type_id, publication_date, value, price, notes, signed, grade_id, bagged, issue_number', 'safe', 'on' => 'search'),
         );
     }
 
@@ -57,7 +59,9 @@ class Book extends CActiveRecord{
         return array(
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
             'grade' => array(self::BELONGS_TO, 'Grade', 'grade_id'),
-            'people' => array(self::MANY_MANY, 'Person', 'bookillustrator(book_id, illustrator_id)'),
+            'illustrators' => array(self::MANY_MANY, 'Person', 'bookillustrator(book_id, illustrator_id)'),
+            'authors' => array(self::MANY_MANY, 'Person', 'bookauthor(book_id, author_id)', 'index' => 'id'),
+            'bookauthors' => array(self::HAS_MANY, 'BookAuthor', 'book_id', 'index' => 'author_id'),
             'publishers' => array(self::MANY_MANY, 'Publisher', 'bookpublisher(book_id, publisher_id)'),
             'tags' => array(self::MANY_MANY, 'Tag', 'booktag(book_id, tag_id)'),
         );
@@ -78,6 +82,7 @@ class Book extends CActiveRecord{
             'signed' => 'Signed',
             'grade_id' => 'Grade',
             'bagged' => 'Bagged',
+            'issue_number' => 'Issue Number',
         );
     }
 
@@ -108,6 +113,7 @@ class Book extends CActiveRecord{
         $criteria->compare('signed', $this->signed);
         $criteria->compare('grade_id', $this->grade_id, true);
         $criteria->compare('bagged', $this->bagged);
+        $criteria->compare('issue_number', $this->issue_number, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

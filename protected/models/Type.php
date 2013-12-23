@@ -50,7 +50,7 @@ class Type extends CActiveRecord{
     public function attributeLabels() {
         return array(
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Type',
         );
     }
 
@@ -90,9 +90,8 @@ class Type extends CActiveRecord{
     }
 
     public function getTypeOptions() {
-        return CHtml::listData(Type::model()->findAll(), 'id', 'name');
+        return CMap::mergeArray(array('' => ''), CHtml::listData(Type::model()->findAll(), 'id', 'name'));
     }
-
 
 
 }
