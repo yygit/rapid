@@ -83,6 +83,7 @@ class Book extends CActiveRecord{
             'grade_id' => 'Grade',
             'bagged' => 'Bagged',
             'issue_number' => 'Issue Number',
+            'author' => 'Book Author',
         );
     }
 
@@ -128,5 +129,29 @@ class Book extends CActiveRecord{
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
+    }
+
+    /**
+     * @param $author Person
+     */
+    public function addAuthor($author) {
+        if ($author->isNewRecord) {
+            $author->save();
+            $bookauthor = new BookAuthor();
+            $bookauthor->book_id = $this->id;
+            $bookauthor->author_id = $author->id;
+            $bookauthor->save();
+//            return $bookauthor->save();
+        }
+        return false;
+    }
+
+    /**
+     * @param $author_id string
+     */
+    public function removeAuthor($author_id) {
+        $pk = array('book_id' => $this->id, 'author_id' => $author_id);
+        BookAuthor::model()->deleteByPk($pk);
+//        return BookAuthor::model()->deleteByPk($pk);
     }
 }

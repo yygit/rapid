@@ -2,17 +2,20 @@
 /* @var $this BookController */
 /* @var $model Book */
 
-$this->breadcrumbs=array(
-	'Books'=>array('index'),
-	'Create',
+$this->breadcrumbs = array(
+    'Books' => array('index'),
+    'Create',
 );
 
-$this->menu=array(
-	array('label'=>'List Book', 'url'=>array('index')),
-	array('label'=>'Manage Book', 'url'=>array('admin')),
+$this->menu = array(
+    array('label' => 'List Book', 'url' => array('index')),
+    array('label' => 'Manage Book', 'url' => array('admin')),
 );
 ?>
 
 <h1>Create Book</h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', array(
+    'model' => $model,
+    'author' => $author,
+)); ?>

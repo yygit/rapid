@@ -30,11 +30,11 @@ class BookController extends Controller{
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update'),
+                'actions' => array('create', 'update', 'admin', 'removeAuthor', 'createAuthor'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete'),
+                'actions' => array('delete'),
                 'users' => array('admin'),
             ),
             array('deny', // deny all users
@@ -62,17 +62,27 @@ class BookController extends Controller{
         $model->bagged = 1;
 //        $model->signed = 1;
 
+        $author = $this->createAuthor($model);
+
         // Uncomment the following line if AJAX validation is needed
          $this->performAjaxValidation($model);
 
         if (isset($_POST['Book'])) {
             $model->attributes = $_POST['Book'];
-            if ($model->save())
+            if ($model->save()) {
+                // record book/author association
+                $ba = new BookAuthor;
+                $ba->book_id = $model->id;
+                $ba->author_id = $author->id;
+                $ba->save();
+
                 $this->redirect(array('view', 'id' => $model->id));
+            }
         }
 
         $this->render('create', array(
             'model' => $model,
+            'author' => $author,
         ));
     }
 
@@ -83,6 +93,7 @@ class BookController extends Controller{
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+        $author = $this->createAuthor($model);
 
         // Uncomment the following line if AJAX validation is needed
          $this->performAjaxValidation($model);
@@ -95,6 +106,7 @@ class BookController extends Controller{
 
         $this->render('update', array(
             'model' => $model,
+            'author' => $author,
         ));
     }
 
@@ -158,6 +170,58 @@ class BookController extends Controller{
         if (isset($_POST['ajax']) && $_POST['ajax'] === 'book-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
+        }
+    }
+
+    /**
+     * @param $book Book
+     * @return Person
+     */
+    protected function createAuthor($book) {
+        $author = new Person();
+        if(isset($_POST['Person'])) {
+            $author->attributes=$_POST['Person'];
+            if ($book->addAuthor($author)) {
+                Yii::app()->user->setFlash('authorAdded', "Added author " . CHtml::encode($author->fname . " " . $author->lname));
+                $this->refresh();
+            }
+        }
+        return $author;
+    }
+
+    /**
+     * @param $id
+     * @throws CHttpException
+     */
+    public function actionRemoveAuthor($id) {
+        // request must be made via ajax
+        if (Yii::app()->request->isAjaxRequest) {
+            $model = $this->loadModel($id);
+            $model->removeAuthor($_GET['author_id']);
+        } else {
+            throw new CHttpException(400, 'Invalid request.');
+        }
+    }
+
+    /**
+     * @param $id
+     * @throws CHttpException
+     */
+    public function actionCreateAuthor($id) {
+        // request must be made via ajax
+        if (isset($_GET['ajax']) && isset($_GET['Person'])) {
+            $model = $this->loadModel($id);
+            $author = new Person();
+            $author->attributes = $_GET['Person'];
+            if (($author->fname != null) && ($author->lname != null)) {
+                $model->addAuthor($author);
+                $this->renderPartial('_li', array(
+                    'model' => $model,
+                    'author' => $author,
+                ), false, true);
+            }
+        } else {
+            throw new CHttpException(400, 'Invalid request.');
         }
     }
 }

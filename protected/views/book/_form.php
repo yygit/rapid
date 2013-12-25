@@ -20,7 +20,7 @@ Yii::app()->end();*/
         'clientOptions' => array(
             'validateOnSubmit' => true,
         ),
-        'htmlOptions' => array(
+        'htmlOptions' => array( // otherwise, disable ajax globally, see jquery.mobile-config.js
             'data-ajax' => 'false',
         ),
     )); ?>
@@ -104,6 +104,42 @@ Yii::app()->end();*/
         <?php /*echo $form->textField($model, 'bagged'); */ ?>
         <?php echo $form->checkbox($model, 'bagged'); ?>
         <?php echo $form->error($model, 'bagged'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model, 'author'); ?>
+        <?php if (Yii::app()->user->hasFlash('authorAdded')) { ?>
+            <div class="flash-success">
+                <?php echo Yii::app()->user->getFlash('authorAdded'); ?>
+            </div>
+        <?php
+        } else {
+            echo $this->renderPartial('/person/_form', array(
+                'model' => $author,
+                'subform' => 1,
+            ));
+            if (Yii::app()->controller->action->id != 'create') {
+            ?>
+                <div class="row buttons">
+                    <input class="add" type="button" obj="Person"
+                           url="<?php echo Yii::app()->controller->createUrl("createAuthor", array("id" => $model->id)); ?>"
+                           value="Add"/>
+                </div>
+            <?php
+            }
+        } ?>
+        <?php
+        if (count($model->authors)) {
+            echo "<ul class=\"authors\">";
+            foreach ($model->authors as $auth) {
+                echo $this->renderPartial('_li', array(
+                    'model' => $model,
+                    'author' => $auth,
+                ));
+            }
+            echo "</ul>";
+        }
+        ?>
     </div>
 
     <div class="row buttons">
