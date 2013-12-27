@@ -37,4 +37,20 @@ class Controller extends CController{
         return true;
     }
 
+    /**
+     * if available, use different views for mobile browsers
+     * @param string $viewName
+     * @return string
+     */
+    public function getViewFile($viewName) {
+        if (Yii::app()->user->getState('mobile')) {
+            $newViewName = 'mobile_' . $viewName;
+            $newViewFile = parent::getViewFile($newViewName);
+            if($newViewFile){
+                return $newViewFile;
+            }
+        }
+        return parent::getViewFile($viewName);
+    }
+
 }

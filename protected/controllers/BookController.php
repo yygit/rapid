@@ -174,6 +174,7 @@ class BookController extends Controller{
     }
 
     /**
+     * create author when pressing 'save' button at Book form
      * @param $book Book
      * @return Person
      */
@@ -197,13 +198,16 @@ class BookController extends Controller{
         // request must be made via ajax
         if (Yii::app()->request->isAjaxRequest) {
             $model = $this->loadModel($id);
-            $model->removeAuthor($_GET['author_id']);
+            if ($model->removeAuthor($_GET['author_id'])) {
+                Yii::app()->user->setFlash('authorRemoved', "Removed author " . $_GET['author_id']);
+            }
         } else {
             throw new CHttpException(400, 'Invalid request.');
         }
     }
 
     /**
+     * create author by ajax request when pressing 'add' button at Book form
      * @param $id
      * @throws CHttpException
      */
@@ -214,11 +218,13 @@ class BookController extends Controller{
             $author = new Person();
             $author->attributes = $_GET['Person'];
             if (($author->fname != null) && ($author->lname != null)) {
-                $model->addAuthor($author);
-                $this->renderPartial('_li', array(
-                    'model' => $model,
-                    'author' => $author,
-                ), false, true);
+                if($model->addAuthor($author)){
+                    Yii::app()->user->setFlash('authorAdded', "Added author " . CHtml::encode($author->fname . " " . $author->lname));
+                    /*$this->renderPartial('_li', array(
+                        'model' => $model,
+                        'author' => $author,
+                    ), false, true);*/
+                }
             }
         } else {
             throw new CHttpException(400, 'Invalid request.');

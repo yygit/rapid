@@ -8,11 +8,13 @@
     <!--CSS includes here -->
     <!--<link rel="stylesheet" type="text/css" href="<?php /*echo Yii::app()->request->baseUrl; */?>/css/jquery.mobile-1.1.0.min.css" media="screen, projection"/>-->
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/jquery.mobile-1.4.0.min.css" media="screen, projection"/>
+    <!--<link rel="stylesheet" type="text/css" href="<?php /*echo Yii::app()->request->baseUrl; */?>/css/jquery.mobile.theme-1.4.0.min.css" media="screen, projection"/>-->
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main-mobile.css" media="screen, projection"/>
     <?php
         Yii::app()->clientScript->registerCoreScript('jquery');
-        Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/jquery.mobile-config.js', CClientScript::POS_HEAD);
-        // Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/jquery.mobile-1.1.0.js', CClientScript::POS_HEAD);
-         Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/jquery.mobile-1.4.0.min.js', CClientScript::POS_HEAD);
+    // Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/jquery.mobile-1.1.0.js', CClientScript::POS_HEAD);
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/jquery.mobile-config.js', CClientScript::POS_HEAD);
+    Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/jquery.mobile-1.4.0.min.js', CClientScript::POS_HEAD);
     ?>
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
@@ -21,6 +23,7 @@
 
 <div data-role="page">
     <div data-role="collapsible" data-theme="b">
+    <!--<div data-role="collapsible" data-content-theme="a">-->
         <h3>Main Menu</h3>
         <?php
         $htmlOptions = array('data-role' => 'controlgroup', 'class' => 'localnav');

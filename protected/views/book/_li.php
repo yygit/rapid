@@ -1,5 +1,9 @@
 <?php
-echo "<li id=\"author-" . $author->id . "\">" .
+/**
+ * @var $model Book
+ * @var $author Person
+ */
+/*echo "<li id=\"author-" . $author->id . "\">" .
     $author->fname . " " . $author->lname .
     " <input class=\"delete\" " . "type=\"button\" url=\"" .
     Yii::app()->controller->createUrl("removeAuthor", array(
@@ -9,9 +13,10 @@ echo "<li id=\"author-" . $author->id . "\">" .
     )) .
     "\" author_id=\"" . $author->id .
     "\" value=\"delete\" />" .
-    "</li>";
+    "</li>";*/
 
-echo CHtml::ajaxButton('DELETE',
+echo '<li id="author-' . $author->id . '">' . $author->fname . " " . $author->lname . ' ';
+echo CHtml::ajaxButton('delete',
     Yii::app()->createUrl('book/removeAuthor', array(
         "id" => $model->id,
         "author_id" => $author->id,
@@ -20,12 +25,20 @@ echo CHtml::ajaxButton('DELETE',
     array(
         'dataType' => 'html',
         'type' => 'post',
-//                'update' => '#ajaxcomments',
-        'success' => 'js:function(result) {
-//                    $("#ajaxcomments").html(result);
-                    alert("ok");
-                }',
+        //  'update' => '#ajaxcomments',
+        'success' => 'js:function(result, textStatus) {
+            // $("#ajaxcomments").html(result);
+            // alert("OK: "+textStatus);
+            window.location.reload();
+        }',
+        'error' => 'js:function(jqXHR, textStatus, errorThrown) {
+            alert("ERROR: " + textStatus + " " + errorThrown);
+        }',
+        'beforeSend' => 'js:function() {
+            return confirm("delete author #'.$author->id.' ('.$author->fname.' '.$author->lname.') ?");
+        }',
         'cache' => false,
-//        'data' => 'js:jQuery(this).parents("form").serialize()'
+        // 'data' => 'js:jQuery(this).parents("form").serialize()'
     ) // ajax
 ); // script
+echo '</li>';

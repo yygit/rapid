@@ -16,7 +16,7 @@ Yii::app()->end();*/
         // There is a call to performAjaxValidation() commented in generated controller code.
         // See class documentation of CActiveForm for details on this.
         'enableClientValidation' => true,
-        'enableAjaxValidation' => true,
+//        'enableAjaxValidation' => true,
         'clientOptions' => array(
             'validateOnSubmit' => true,
         ),
@@ -108,26 +108,60 @@ Yii::app()->end();*/
 
     <div class="row">
         <?php echo $form->labelEx($model, 'author'); ?>
-        <?php if (Yii::app()->user->hasFlash('authorAdded')) { ?>
+        <?php if (Yii::app()->user->hasFlash('authorRemoved')) { ?>
+            <div class="flash-success">
+                <?php echo Yii::app()->user->getFlash('authorRemoved'); ?>
+            </div>
+        <?php
+        }
+        if (Yii::app()->user->hasFlash('authorAdded')) { ?>
             <div class="flash-success">
                 <?php echo Yii::app()->user->getFlash('authorAdded'); ?>
             </div>
         <?php
-        } else {
+        }
+//        else {
             echo $this->renderPartial('/person/_form', array(
                 'model' => $author,
                 'subform' => 1,
             ));
             if (Yii::app()->controller->action->id != 'create') {
             ?>
-                <div class="row buttons">
+                <!--<div class="row buttons">
                     <input class="add" type="button" obj="Person"
-                           url="<?php echo Yii::app()->controller->createUrl("createAuthor", array("id" => $model->id)); ?>"
+                           url="<?php /*echo Yii::app()->controller->createUrl("createAuthor", array("id" => $model->id)); */?>"
                            value="Add"/>
-                </div>
+                </div>-->
+
             <?php
+                echo '<div class="row buttons">';
+                echo CHtml::ajaxButton('add',
+                $this->createUrl('createAuthor', array(
+                    "id" => $model->id,
+                    "ajax" => 1,
+                )),
+                array(
+                    'dataType' => 'html',
+                    'type' => 'get',
+                    //  'update' => '#ajaxcomments',
+                    'success' => 'js:function(result, textStatus) {
+                        // alert("OK: "+textStatus);
+                        window.location.reload();
+                    }',
+                    'error' => 'js:function(jqXHR, textStatus, errorThrown) {
+                        alert("ERROR: " + textStatus + " " + errorThrown);
+                    }',
+                    'beforeSend' => 'js:function() {
+                        return confirm("add author to book #'.$model->id.' ?");
+                    }',
+                    'cache' => false,
+                    // 'data' => 'js:jQuery(this).parents("form").serialize()'
+                ) // ajax
+                ); // script
+                echo '</div';
             }
-        } ?>
+//        } // else
+        ?>
         <?php
         if (count($model->authors)) {
             echo "<ul class=\"authors\">";

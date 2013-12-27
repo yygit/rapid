@@ -140,8 +140,8 @@ class Book extends CActiveRecord{
             $bookauthor = new BookAuthor();
             $bookauthor->book_id = $this->id;
             $bookauthor->author_id = $author->id;
-            $bookauthor->save();
-//            return $bookauthor->save();
+//            $bookauthor->save();
+            return $bookauthor->save();
         }
         return false;
     }
@@ -151,7 +151,7 @@ class Book extends CActiveRecord{
      */
     public function removeAuthor($author_id) {
         $pk = array('book_id' => $this->id, 'author_id' => $author_id);
-        BookAuthor::model()->deleteByPk($pk);
-//        return BookAuthor::model()->deleteByPk($pk);
+//        BookAuthor::model()->deleteByPk($pk);
+        return BookAuthor::model()->deleteByPk($pk);
     }
 }
