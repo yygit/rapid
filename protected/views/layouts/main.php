@@ -74,6 +74,7 @@
                             array('label' => 'Publishers', 'url' => array('/publisher')),
                         )
                     ),
+                    array('label' => 'Users', 'url' => array('/user')),
                     array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'))
                 ),
             ));

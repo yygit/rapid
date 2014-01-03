@@ -2,6 +2,7 @@
 /**
  * @var $this BookController
  * @var $author Person
+ * @var $authors array
  */
 ?>
 

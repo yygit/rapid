@@ -1,23 +1,29 @@
 <?php
 
 /**
- * This is the model class for table "person".
+ * This is the model class for table "user".
  *
- * The followings are the available columns in table 'person':
+ * The followings are the available columns in table 'user':
  * @property string $id
- * @property string $fname
- * @property string $lname
+ * @property string $username
+ * @property string $pwd_hash
+ * @property string $person_id
  *
  * The followings are the available model relations:
- * @property Book[] $books
- * @property Book[] $books1
+ * @property Person $person
  */
-class Person extends CActiveRecord{
+class User extends CActiveRecord{
+
+    public $password;
+    public $password_repeat;
+    public $person_fname;
+    public $person_lname;
+
     /**
      * @return string the associated database table name
      */
     public function tableName() {
-        return 'person';
+        return 'user';
     }
 
     /**
@@ -27,11 +33,12 @@ class Person extends CActiveRecord{
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('fname, lname', 'required'),
-            array('fname, lname', 'length', 'max' => 64),
-            // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
-            array('id, fname, lname', 'safe', 'on' => 'search'),
+            array('username', 'required'),
+            array('username', 'length', 'max'=>20),
+            array('password', 'length', 'max'=>32),
+            array('password', 'compare'),
+            array('password_repeat', 'safe'),
+            array('id, username, person_fname, person_lname', 'safe', 'on' => 'search'),
         );
     }
 
@@ -42,8 +49,7 @@ class Person extends CActiveRecord{
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'books' => array(self::MANY_MANY, 'Book', 'bookauthor(author_id, book_id)'),
-            'books1' => array(self::MANY_MANY, 'Book', 'bookillustrator(illustrator_id, book_id)'),
+            'person' => array(self::BELONGS_TO, 'Person', 'person_id'),
         );
     }
 
@@ -53,8 +59,11 @@ class Person extends CActiveRecord{
     public function attributeLabels() {
         return array(
             'id' => 'ID',
-            'fname' => 'First Name',
-            'lname' => 'Last Name',
+            'username' => 'Username',
+            'password' => 'Password',
+            'password_repeat' => 'Password Repeat',
+            'person_fname' => Person::model()->getAttributeLabel("fname"),
+            'person_lname' => Person::model()->getAttributeLabel("lname"),
         );
     }
 
@@ -71,16 +80,32 @@ class Person extends CActiveRecord{
      * based on the search/filter conditions.
      */
     public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
+        // Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
+        $criteria->compare('t.id', $this->id, true);
+        $criteria->compare('t.username', $this->username, true);
+        $criteria->compare('person.fname', $this->person_fname, true);
+        $criteria->compare('person.lname', $this->person_lname, true);
+        $criteria->with = array('person');
 
-        $criteria->compare('id', $this->id, true);
-        $criteria->compare('fname', $this->fname, true);
-        $criteria->compare('lname', $this->lname, true);
+        $sort = new CSort;
+        $sort->defaultOrder = array('id' => CSort::SORT_ASC);
+        $sort->attributes = array(
+            'person_fname' => array(
+                'asc' => 'person.fname',
+                'desc' => 'person.fname DESC',
+            ),
+            'person_lname' => array(
+                'asc' => 'person.lname',
+                'desc' => 'person.lname DESC',
+            ),
+            '*',
+        );
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'sort' => $sort,
         ));
     }
 
@@ -88,7 +113,7 @@ class Person extends CActiveRecord{
      * Returns the static model of the specified AR class.
      * Please note that you should have this exact method in all your CActiveRecord descendants!
      * @param string $className active record class name.
-     * @return Person the static model class
+     * @return User the static model class
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
