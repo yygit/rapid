@@ -28,7 +28,7 @@ class Bookillustrator extends CActiveRecord
 			array('book_id, illustrator_id', 'required'),
 			array('book_id, illustrator_id', 'length', 'max'=>10),
 			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+			// Please remove those attributes that should not be searched.
 			array('book_id, illustrator_id', 'safe', 'on'=>'search'),
 		);
 	}
@@ -69,7 +69,7 @@ class Bookillustrator extends CActiveRecord
 	 */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+		// Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
 

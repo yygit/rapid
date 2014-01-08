@@ -29,8 +29,9 @@ class Person extends CActiveRecord{
         return array(
             array('fname, lname', 'required'),
             array('fname, lname', 'length', 'max' => 64),
+            array('fname, lname', 'filter', 'filter' => 'trim'),
             // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
+            // Please remove those attributes that should not be searched.
             array('id, fname, lname', 'safe', 'on' => 'search'),
         );
     }
@@ -71,7 +72,7 @@ class Person extends CActiveRecord{
      * based on the search/filter conditions.
      */
     public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
+        // Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
 
@@ -79,8 +80,12 @@ class Person extends CActiveRecord{
         $criteria->compare('fname', $this->fname, true);
         $criteria->compare('lname', $this->lname, true);
 
+        $sort = new CSort;
+        $sort->defaultOrder = array('id' => CSort::SORT_ASC);
+
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'sort' => $sort,
         ));
     }
 

@@ -1,20 +1,20 @@
 <?php
 
 /**
- * This is the model class for table "booktag".
+ * This is the model class for table "wishillustrator".
  *
- * The followings are the available columns in table 'booktag':
- * @property string $book_id
- * @property string $tag_id
+ * The followings are the available columns in table 'wishillustrator':
+ * @property string $wish_id
+ * @property string $illustrator_id
  */
-class Booktag extends CActiveRecord
+class Wishillustrator extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'booktag';
+		return 'wishillustrator';
 	}
 
 	/**
@@ -25,11 +25,11 @@ class Booktag extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('book_id, tag_id', 'required'),
-			array('book_id, tag_id', 'length', 'max'=>10),
+			array('wish_id, illustrator_id', 'required'),
+			array('wish_id, illustrator_id', 'length', 'max'=>10),
 			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('book_id, tag_id', 'safe', 'on'=>'search'),
+			// @todo Please remove those attributes that should not be searched.
+			array('wish_id, illustrator_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,8 +50,8 @@ class Booktag extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'book_id' => 'Book',
-			'tag_id' => 'Tag',
+			'wish_id' => 'Wish',
+			'illustrator_id' => 'Illustrator',
 		);
 	}
 
@@ -69,12 +69,12 @@ class Booktag extends CActiveRecord
 	 */
 	public function search()
 	{
-		// Please modify the following code to remove attributes that should not be searched.
+		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('book_id',$this->book_id,true);
-		$criteria->compare('tag_id',$this->tag_id,true);
+		$criteria->compare('wish_id',$this->wish_id,true);
+		$criteria->compare('illustrator_id',$this->illustrator_id,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -85,7 +85,7 @@ class Booktag extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Booktag the static model class
+	 * @return Wishillustrator the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

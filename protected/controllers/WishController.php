@@ -1,12 +1,11 @@
 <?php
 
-class BookController extends BController {
+class WishController extends BController{
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/column2';
-    public $defaultAction = 'admin';
 
     /**
      * @return array action filters
@@ -30,11 +29,11 @@ class BookController extends BController {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'admin', 'removeAuthor', 'createAuthor'),
+                'actions' => array('create', 'update', 'removeAuthor', 'createAuthor'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('delete'),
+                'actions' => array('admin', 'delete'),
                 'users' => array('admin'),
             ),
             array('deny', // deny all users
@@ -58,57 +57,10 @@ class BookController extends BController {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        $model = new Book;
-        $model->bagged = 1;
-//        $model->signed = 1;
-
-        $author = $this->createAuthor($model);
-
-        // Uncomment the following line if AJAX validation is needed
-         $this->performAjaxValidation($model);
-
-        if (isset($_POST['Book'])) {
-            $model->attributes = $_POST['Book'];
-            if ($model->save()) {
-                // record book/author association
-                $ba = new BookAuthor;
-                $ba->book_id = $model->id;
-                $ba->author_id = $author->id;
-                $ba->save();
-
-                $this->redirect(array('view', 'id' => $model->id));
-            }
-        }
-
-        $this->render('create', array(
-            'model' => $model,
-            'author' => $author,
-        ));
+        $model = new Wish;
+        $this->create($model);
     }
 
-    /**
-     * Updates a particular model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id the ID of the model to be updated
-     */
-    public function actionUpdate($id) {
-        $model = $this->loadModel($id);
-        $author = $this->createAuthor($model);
-
-        // Uncomment the following line if AJAX validation is needed
-         $this->performAjaxValidation($model);
-
-        if (isset($_POST['Book'])) {
-            $model->attributes = $_POST['Book'];
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
-        }
-
-        $this->render('update', array(
-            'model' => $model,
-            'author' => $author,
-        ));
-    }
 
     /**
      * Deletes a particular model.
@@ -127,7 +79,7 @@ class BookController extends BController {
      * Lists all models.
      */
     public function actionIndex() {
-        $dataProvider = new CActiveDataProvider('Book');
+        $dataProvider = new CActiveDataProvider('Wish');
         $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
@@ -137,10 +89,10 @@ class BookController extends BController {
      * Manages all models.
      */
     public function actionAdmin() {
-        $model = new Book('search');
+        $model = new Wish('search');
         $model->unsetAttributes(); // clear any default values
-        if (isset($_GET['Book']))
-            $model->attributes = $_GET['Book'];
+        if (isset($_GET['Wish']))
+            $model->attributes = $_GET['Wish'];
 
         $this->render('admin', array(
             'model' => $model,
@@ -151,12 +103,11 @@ class BookController extends BController {
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer $id the ID of the model to be loaded
-     * @return Book the loaded model
+     * @return Wish the loaded model
      * @throws CHttpException
      */
     public function loadModel($id) {
-//        $model = Book::model()->findByPk($id);
-        $model = Book::model()->with('authors')->findByPk($id);
+        $model = Wish::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
@@ -164,16 +115,24 @@ class BookController extends BController {
 
     /**
      * Performs the AJAX validation.
-     * @param Book $model the model to be validated
+     * @param Wish $model the model to be validated
      */
     protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'book-form') {
+        if (isset($_POST['ajax']) && $_POST['ajax'] === 'wish-form') {
             echo CActiveForm::validate($model);
             Yii::app()->end();
         }
     }
 
-
-
-
+    /**
+     * record wish/author association
+     * @param $model
+     * @param $author
+     */
+    protected function saveAssociation($model, $author) {
+        $wa = new WishAuthor;
+        $wa->wish_id = $model->id;
+        $wa->author_id = $author->id;
+        $wa->save();
+    }
 }

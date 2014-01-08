@@ -28,7 +28,7 @@ class Type extends CActiveRecord{
             array('name', 'required'),
             array('name', 'length', 'max' => 256),
             // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
+            // Please remove those attributes that should not be searched.
             array('id, name', 'safe', 'on' => 'search'),
         );
     }
@@ -67,7 +67,7 @@ class Type extends CActiveRecord{
      * based on the search/filter conditions.
      */
     public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
+        // Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
 

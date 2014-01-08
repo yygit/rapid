@@ -24,16 +24,11 @@ class UserController extends Controller{
      */
     public function accessRules() {
         return array(
-            array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view'),
-                'users' => array('*'),
-            ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update'),
+                'actions' => array('index', 'view', 'create', 'update'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-//                'actions' => array('admin', 'delete'),
                 'actions' => array('delete'),
                 'users' => array('admin'),
             ),
@@ -56,6 +51,7 @@ class UserController extends Controller{
     /**
      * Creates a new model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @todo: use transactions, not 'if' statements to save User and Person models
      */
     public function actionCreate() {
         $user = new User;
@@ -66,11 +62,15 @@ class UserController extends Controller{
 
         if (isset($_POST['User'], $_POST['Person'])) {
             $person->attributes = $_POST['Person'];
-            if ($person->save()) {
-                $user->attributes = $_POST['User'];
-                $user->person_id = $person->id;
-                if ($user->save())
-                    $this->redirect(array('view', 'id' => $user->id));
+            $personValidate = $person->validate();
+            $user->attributes = $_POST['User'];
+            $userValidate = $user->validate();
+            if ($userValidate && $personValidate) {
+                if ($person->save()) {
+                    $user->person_id = $person->id;
+                    if ($user->save())
+                        $this->redirect(array('view', 'id' => $user->id));
+                }
             }
         }
 
@@ -84,6 +84,7 @@ class UserController extends Controller{
      * Updates a particular model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id the ID of the model to be updated
+     * @todo: use transactions, not 'if' statements to save User and Person models
      */
     public function actionUpdate($id) {
         $user = $this->loadModel($id);

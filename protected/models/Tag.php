@@ -31,7 +31,7 @@ class Tag extends CActiveRecord
 			array('value', 'required'),
 			array('value', 'length', 'max'=>64),
 			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
+			// Please remove those attributes that should not be searched.
 			array('id, value', 'safe', 'on'=>'search'),
 		);
 	}
@@ -73,7 +73,7 @@ class Tag extends CActiveRecord
 	 */
 	public function search()
 	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+		// Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
 

@@ -34,10 +34,14 @@ class User extends CActiveRecord{
         // will receive user inputs.
         return array(
             array('username', 'required'),
-            array('username', 'length', 'max'=>20),
-            array('password', 'length', 'max'=>32),
+            array('username', 'unique'),
+            array('username', 'length', 'max' => 20),
+            array('password', 'required', 'on' => 'insert'),
+            array('password', 'length', 'min' => 3, 'max' => 32),
             array('password', 'compare'),
+            array('password', 'passwordStrengthOk', 'nonword' => false, 'allowEmpty' => true),
             array('password_repeat', 'safe'),
+            array('username, password', 'filter', 'filter' => 'trim'),
             array('id, username, person_fname, person_lname', 'safe', 'on' => 'search'),
         );
     }
@@ -117,5 +121,47 @@ class User extends CActiveRecord{
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
+    }
+
+    public function init() {
+        parent::init();
+        $this->attachEventHandler('onBeforeSave', array($this, 'encodePass'));
+    }
+
+    public function encodePass() {
+        if (!empty($this->password))
+            $this->pwd_hash = crypt($this->password);
+        return true;
+    }
+
+    public function check($value) {
+        $new_hash = crypt($value, $this->pwd_hash);
+        if ($new_hash == $this->pwd_hash) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param $attribute string password attribute
+     * @param $params array named array  - 'number', 'nonword', 'capital'
+     * @return bool
+     */
+    public function passwordStrengthOk($attribute, $params) {
+        $value = $this->$attribute;
+        if (!empty($params['allowEmpty']) && empty($value)) return true;
+
+        $valid = true; // default to true
+
+        $checkNumber = (isset($params['number']) && $params['number'] === false) ? true : preg_match('|.*[\d].*|', $value);
+        $checkNonword = (isset($params['nonword']) && $params['nonword'] === false) ? true : preg_match('|.*[\W].*|', $value);
+        $checkCapital = (isset($params['capital']) && $params['capital'] === false) ? true : preg_match('|.*[A-Z].*|', $value);
+
+        $valid = $valid && $checkNumber; // at least one number
+        $valid = $valid && $checkNonword; // at least one non-word character
+        $valid = $valid && $checkCapital; // at least one capital letter
+        if (!$valid)
+            $this->addError($attribute, "Does not meet password requirements.");
+        return $valid;
     }
 }

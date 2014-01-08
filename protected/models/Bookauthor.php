@@ -25,7 +25,7 @@ class Bookauthor extends CActiveRecord{
             array('book_id, author_id', 'required'),
             array('book_id, author_id', 'length', 'max' => 10),
             // The following rule is used by search().
-            // @todo Please remove those attributes that should not be searched.
+            // Please remove those attributes that should not be searched.
             array('book_id, author_id', 'safe', 'on' => 'search'),
         );
     }
@@ -62,7 +62,7 @@ class Bookauthor extends CActiveRecord{
      * based on the search/filter conditions.
      */
     public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
+        // Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
 

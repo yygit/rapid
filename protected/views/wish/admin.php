@@ -1,15 +1,15 @@
 <?php
-/* @var $this PersonController */
-/* @var $model Person */
+/* @var $this WishController */
+/* @var $model Wish */
 
 $this->breadcrumbs=array(
-	'People'=>array('index'),
+	'Wishes'=>array('index'),
 	'Manage',
 );
 
 $this->menu=array(
-	array('label'=>'List Person', 'url'=>array('index')),
-	array('label'=>'Create Person', 'url'=>array('create')),
+	array('label'=>'List Wish', 'url'=>array('index')),
+	array('label'=>'Create Wish', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -18,7 +18,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#person-grid').yiiGridView('update', {
+	$('#wish-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -26,12 +26,13 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage People</h1>
+<h1>Manage Wishes</h1>
 
-<!--<p>
+<p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
 or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>-->
+</p>
+
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
@@ -40,13 +41,20 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'person-grid',
+	'id'=>'wish-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'fname',
-		'lname',
+		'title',
+		'issue_number',
+		'type_id',
+		'publication_date',
+		'store_link',
+		/*
+		'notes',
+		'got_it',
+		*/
 		array(
 			'class'=>'CButtonColumn',
 		),

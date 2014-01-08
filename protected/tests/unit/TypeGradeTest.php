@@ -16,12 +16,12 @@ class TypeGradeTest extends CTestCase{
     public function testTypeTypes() {
         $options = Type::model()->getTypeOptions();
         $this->assertTrue(is_array($options));
-        $this->assertEquals(3, count($options));
+        $this->assertEquals(3+1, count($options));  // should be DB number + 1 (due to 'select' option)
     }
 
     public function testGradeTypes() {
         $options = Grade::model()->getTypeOptions();
         $this->assertTrue(is_array($options));
-        $this->assertEquals(8, count($options));
+        $this->assertEquals(8+1, count($options)); // should be DB number + 1 (due to 'select' option)
     }
 }

@@ -72,6 +72,7 @@
                         'url' => array('/book'),
                         'items' => array(
                             array('label' => 'Publishers', 'url' => array('/publisher')),
+                            array('label'=>'WishList', 'url'=>array('/wish')),
                         )
                     ),
                     array('label' => 'Users', 'url' => array('/user')),
