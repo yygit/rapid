@@ -1,3 +1,6 @@
+/**
+ * loaded in \views\wish\update.php and \views\wish\create.php to support author adding and deletion
+ */
 $(document).ready(function () {
 
     $('.delete').click(function () {
@@ -33,7 +36,7 @@ $(document).ready(function () {
             success: function (resp) {
                 console.log(resp);
                 $("ul.authors").append(resp);
-                window.location.reload();
+                window.location.reload(); // YY 20140108
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert("ERROR: " + textStatus + " " + errorThrown);

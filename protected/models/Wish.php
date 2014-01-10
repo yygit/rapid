@@ -90,7 +90,7 @@ class Wish extends CActiveRecord{
      * based on the search/filter conditions.
      */
     public function search() {
-        // @todo Please modify the following code to remove attributes that should not be searched.
+        // Please modify the following code to remove attributes that should not be searched.
 
         $criteria = new CDbCriteria;
 
@@ -102,6 +102,8 @@ class Wish extends CActiveRecord{
         $criteria->compare('store_link', $this->store_link, true);
         $criteria->compare('notes', $this->notes, true);
         $criteria->compare('got_it', $this->got_it, true);
+
+        $criteria->scopes = array('gotIt'); // YY; 20140109
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
@@ -127,7 +129,7 @@ class Wish extends CActiveRecord{
         try {
             $author->save();
         } catch (CDbException $e) {
-            if ($e){
+            if ($e) {
                 Yii::app()->user->setFlash('authorAddedNotice', "Notice: " . $e->getMessage());
             }
         }
@@ -142,5 +144,35 @@ class Wish extends CActiveRecord{
     public function removeAuthor($author_id) {
         $pk = array('wish_id' => $this->id, 'author_id' => $author_id);
         WishAuthor::model()->deleteByPk($pk);
+    }
+
+    /**
+     * @return array
+     */
+    /*public function scopes() {
+        $user = Yii::app()->user;
+        if (empty($user->id) OR empty($user->name) OR $user->name === Yii::app()->params['God'])
+            return array(
+                'gotIt' => array(),
+            );
+
+        return array(
+            'gotIt' => array(
+                'condition' => "got_it is NULL OR " . "got_it='" . Yii::app()->user->id . "'",
+            ),
+        );
+    }*/
+    /**
+     * scope to filter out users who picked up the wish
+     * @return $this
+     */
+    public function gotIt() {
+        $user = Yii::app()->user;
+        if (!empty($user->id) && !empty($user->name) && $user->name !== Yii::app()->params['God']) {
+            $this->getDbCriteria()->mergeWith(array(
+                'condition' => "got_it is NULL OR " . "got_it='" . Yii::app()->user->id . "'",
+            ));
+        }
+        return $this;
     }
 }

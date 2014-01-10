@@ -3,7 +3,7 @@
 /* @var $model Wish */
 
 $this->breadcrumbs=array(
-	'Wishes'=>array('index'),
+	'Wishes'=>array('wish/'),
 	'Manage',
 );
 
@@ -53,8 +53,8 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'store_link',
 		/*
 		'notes',
-		'got_it',
 		*/
+		'got_it',
 		array(
 			'class'=>'CButtonColumn',
 		),

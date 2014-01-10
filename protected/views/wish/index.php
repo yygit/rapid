@@ -2,6 +2,9 @@
 /* @var $this WishController */
 /* @var $dataProvider CActiveDataProvider */
 
+/*var_dump(Yii::app()->user->id);
+var_dump(Yii::app()->user->name);*/
+
 $this->breadcrumbs=array(
 	'Wishes',
 );

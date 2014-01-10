@@ -36,7 +36,7 @@ class BController extends Controller{
 
     /**
      * create author when pressing 'save' button at Book form
-     * @param $model CActiveRecord
+     * @param $model Wish|Book
      * @return Person
      */
     protected function createAuthor($model) {

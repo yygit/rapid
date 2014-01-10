@@ -14,6 +14,7 @@ class WishController extends BController{
         return array(
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
+            'ajaxOnly + claim', // only ajax requests
         );
     }
 
@@ -25,15 +26,11 @@ class WishController extends BController{
     public function accessRules() {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view'),
-                'users' => array('*'),
-            ),
-            array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'removeAuthor', 'createAuthor'),
+                'actions' => array('index', 'view', 'claim'),
                 'users' => array('@'),
             ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete'),
+            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+                'actions' => array('create', 'update', 'admin', 'delete', 'removeAuthor', 'createAuthor'),
                 'users' => array('admin'),
             ),
             array('deny', // deny all users
@@ -80,6 +77,9 @@ class WishController extends BController{
      */
     public function actionIndex() {
         $dataProvider = new CActiveDataProvider('Wish');
+        $dataProvider->criteria = array(
+            'scopes' => array('gotIt'), // YY; 20140109
+        );
         $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
@@ -107,7 +107,7 @@ class WishController extends BController{
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = Wish::model()->findByPk($id);
+        $model = Wish::model()->gotIt()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
@@ -135,4 +135,29 @@ class WishController extends BController{
         $wa->author_id = $author->id;
         $wa->save();
     }
+
+    /**
+     * processing ajax requests from \js\wish_list_ajax.js
+     * @param $id
+     */
+    public function actionClaim($id) {
+        $model = $this->loadModel($id);
+        $status = 'indefinite';
+        // if the wish was claimed by the user, toggle it off
+        if ($model->got_it == Yii::app()->user->getId()) {
+            $model->got_it = new CDbExpression('NULL');
+            $status = 'disclaimed';
+        }
+        // if the wish was claimed by no one, toggle it on
+        if ($model->got_it == null) {
+            $model->got_it = Yii::app()->user->getId();
+            $status = 'claimed';
+        }
+        if ($model->save()) {
+            echo $status;
+        } else
+            echo 'cannot save';
+    }
+
+
 }

@@ -6,6 +6,10 @@
  * data can identity the user.
  */
 class UserIdentity extends CUserIdentity{
+
+    private $_id;
+    private $_username;
+
     /**
      * Authenticates a user.
      * The example implementation makes sure if the username and password
@@ -20,9 +24,19 @@ class UserIdentity extends CUserIdentity{
             $this->errorCode = self::ERROR_USERNAME_INVALID;
         else
             if ($user->check($this->password)) {
+                $this->_id = $user->id;
+                $this->_username = $user->username;
                 $this->errorCode = self::ERROR_NONE;
             } else
                 $this->errorCode = self::ERROR_PASSWORD_INVALID;
         return !$this->errorCode;
+    }
+
+    public function getName() {
+        return $this->_username;
+    }
+
+    public function getId() {
+        return $this->_id;
     }
 }
