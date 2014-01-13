@@ -170,7 +170,7 @@ class Wish extends CActiveRecord{
         $user = Yii::app()->user;
         if (!empty($user->id) && !empty($user->name) && $user->name !== Yii::app()->params['God']) {
             $this->getDbCriteria()->mergeWith(array(
-                'condition' => "got_it is NULL OR " . "got_it='" . Yii::app()->user->id . "'",
+                'condition' => "got_it is NULL OR got_it='" . Yii::app()->user->id . "'",
             ));
         }
         return $this;

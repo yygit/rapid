@@ -48,41 +48,27 @@
 
     <div id="mainmenu">
         <?php
-        if (Yii::app()->user->isGuest) {
-            $this->widget('zii.widgets.CMenu', array(
-                'activeCssClass' => 'active',
-                'activateParents' => true,
-                'items' => array(
-                    array('label' => 'Home', 'url' => array('/site/index')),
-                    array('label' => 'Turn on mobile view', 'url' => array('?mobile=on')),
-                    //array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-                    //array('label'=>'Contact', 'url'=>array('/site/contact')),
-                    array('label' => 'Login', 'url' => array('/site/login')),
-                ),
-            ));
-        } else {
-            $this->widget('zii.widgets.CMenu', array(
-                'activeCssClass' => 'active',
-                'activateParents' => true,
-                'items' => array(
-                    array('label' => 'Home', 'url' => array('/site/index')),
-                    array('label' => 'Turn on mobile view', 'url' => array('?mobile=on')),
-                    array(
-                        'label' => 'Comic Books',
-                        'url' => array('/book'),
-                        'items' => array(
-                            array('label' => 'Publishers', 'url' => array('/publisher')),
-                            array('label'=>'WishList', 'url'=>array('/wish')),
-                        )
+        $this->widget('application.components.AuthMenu', array(
+            'activeCssClass' => 'active',
+            'activateParents' => true,
+            'items' => array(
+                array('label' => 'Home', 'url' => array('/site/index'), 'visible' => true),
+                array('label' => 'Turn on mobile view', 'url' => array('', 'mobile'=>'on'), 'visible'=>'true'),
+                array(
+                    'label' => 'Comic Books',
+                    'url' => array('/book'),
+                    'items' => array(
+                        array('label' => 'Publishers', 'url' => array('/publisher')),
+                        array('label' => 'WishList', 'url' => array('/wish')),
                     ),
-                    array('label' => 'Users', 'url' => array('/user')),
-                    array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'))
                 ),
-            ));
-        }
+                array('label' => 'Users', 'url' => array('/user')),
+                array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
+                array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest),
+            ),
+        ));
         ?>
-    </div>
-    <!-- mainmenu -->
+    </div><!-- mainmenu -->
 
     <?php if (isset($this->breadcrumbs)): ?>
         <?php $this->widget('zii.widgets.CBreadcrumbs', array(
