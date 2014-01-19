@@ -101,7 +101,11 @@ class Wish extends CActiveRecord{
         $criteria->compare('publication_date', $this->publication_date, true);
         $criteria->compare('store_link', $this->store_link, true);
         $criteria->compare('notes', $this->notes, true);
-        $criteria->compare('got_it', $this->got_it, true);
+
+        if ($this->got_it === 'null') // YY; 20140115 user should be able finding untaken wishes
+            $criteria->addCondition('`got_it` is NULL');
+        else
+            $criteria->compare('got_it', $this->got_it, true);
 
         $criteria->scopes = array('gotIt'); // YY; 20140109
 

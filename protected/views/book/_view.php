@@ -37,6 +37,18 @@
 	<?php echo CHtml::encode($data->notes); ?>
 	<br />
 
+    <b><?php echo CHtml::encode($data->getAttributeLabel('lendable')); ?>:</b>
+    <?php echo CHtml::encode($data->lendable); ?>
+    <br/>
+
+    <?php
+    echo "<b>" . CHtml::encode($data->getAttributeLabel('borrower')) . ":</b> ";
+    /*BookController::set_fullname($data);
+    echo CHtml::encode($data->borrower_fullname);*/
+    echo CHtml::encode($data->borrower ? $data->borrower->person->fname.' '. $data->borrower->person->lname : '');
+    ?>
+    <br/>
+
 	<?php /*
 	<b><?php echo CHtml::encode($data->getAttributeLabel('signed')); ?>:</b>
 	<?php echo CHtml::encode($data->signed); ?>

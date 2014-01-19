@@ -24,7 +24,11 @@ class UserController extends Controller{
      */
     public function accessRules() {
         return array(
-            array('allow', // allow authenticated user to perform 'create' and 'update' actions
+            array('allow', // allow authenticated user
+                'actions' => array( 'aclist'),
+                'users' => array('@'),
+            ),
+            array('allow', // allow admin
                 'actions' => array('index', 'view', 'create', 'update', 'delete'),
                 'users' => array('admin'),
             ),
@@ -167,4 +171,33 @@ class UserController extends Controller{
             Yii::app()->end();
         }
     }
+
+    /**
+     * @param $term
+     */
+    public function actionAclist() {
+        $results = array();
+        $model = User::model();
+        $criteria = new CDbCriteria();
+        $criteria->with = array('person');
+        $names = preg_split('/\W/', $_GET['term'], 2);
+        if (count($names) == 1) {
+            $criteria->addSearchCondition('person.fname', $names[0], true, 'OR');
+            $criteria->addSearchCondition('person.lname', $names[0], true, 'OR');
+        } else {
+            $criteria->compare('person.fname', $names[0], true);
+            $criteria->compare('person.lname', $names[1], true);
+        }
+        foreach ($model->findAll($criteria) as $m) {
+            $results[] = array(
+                'id' => $m->{'id'},
+                'label' => $m->person->{'fname'} . ' ' . $m->person->{'lname'},
+                'value' => $m->person->{'fname'} . ' ' . $m->person->{'lname'},
+            );
+        }
+        echo CJSON::encode($results);
+    }
+
+
+
 }

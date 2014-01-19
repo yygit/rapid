@@ -6,6 +6,7 @@ class WishController extends BController{
      * using two-column layout. See 'protected/views/layouts/column2.php'.
      */
     public $layout = '//layouts/column2';
+//    public $defaultAction = 'admin';
 
     /**
      * @return array action filters

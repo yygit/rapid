@@ -15,6 +15,9 @@
  * @property string $grade_id
  * @property integer $bagged
  * @property string $issue_number
+ * @property string $borrower_id // YY; 20140113
+ * @property integer $lendable   // YY; 20140113
+ * @property User $borrower      // YY; 20140113
  *
  * The followings are the available model relations:
  * @property Type $type
@@ -24,6 +27,11 @@
  * @property Tag[] $tags
  */
 class Book extends CActiveRecord{
+
+    public $borrower_fullname = '';
+    public $borrower_fname;
+    public $borrower_lname;
+
     /**
      * @return string the associated database table name
      */
@@ -39,14 +47,14 @@ class Book extends CActiveRecord{
         // will receive user inputs.
         return array(
             array('title, type_id, grade_id', 'required'),
-            array('signed, bagged, type_id, grade_id', 'numerical', 'integerOnly' => true),
+            array('signed, bagged, type_id, grade_id, lendable', 'numerical', 'integerOnly' => true),
             array('title', 'length', 'max' => 256),
-            array('issue_number', 'length', 'max' => 10),
-            array('type_id, value, price, grade_id', 'length', 'max' => 10),
+            array('issue_number, type_id, value, price, grade_id, borrower_id', 'length', 'max' => 10),
             array('publication_date, notes', 'safe'),
+            array('borrower_id', 'default', 'value' => null, 'setOnEmpty' => true),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, title, type_id, publication_date, value, price, notes, signed, grade_id, bagged, issue_number', 'safe', 'on' => 'search'),
+            array('id, title, type_id, publication_date, value, price, notes, signed, grade_id, bagged, issue_number, lendable, borrower_fname, borrower_lname', 'safe', 'on' => 'search'),
         );
     }
 
@@ -59,11 +67,15 @@ class Book extends CActiveRecord{
         return array(
             'type' => array(self::BELONGS_TO, 'Type', 'type_id'),
             'grade' => array(self::BELONGS_TO, 'Grade', 'grade_id'),
+//            'publisher' => array(self::BELONGS_TO, 'Publisher', 'publisher_id'),
             'illustrators' => array(self::MANY_MANY, 'Person', 'bookillustrator(book_id, illustrator_id)'),
+            'bookillustrators' => array(self::HAS_MANY, 'BookIllustrator', 'book_id', 'index' => 'illustrator_id'),
             'authors' => array(self::MANY_MANY, 'Person', 'bookauthor(book_id, author_id)', 'index' => 'id'),
             'bookauthors' => array(self::HAS_MANY, 'BookAuthor', 'book_id', 'index' => 'author_id'),
             'publishers' => array(self::MANY_MANY, 'Publisher', 'bookpublisher(book_id, publisher_id)'),
             'tags' => array(self::MANY_MANY, 'Tag', 'booktag(book_id, tag_id)'),
+            'booktags' => array(self::HAS_MANY, 'BookTag', 'book_id'),
+            'borrower' => array(self::BELONGS_TO, 'User', 'borrower_id'),
         );
     }
 
@@ -84,6 +96,10 @@ class Book extends CActiveRecord{
             'bagged' => 'Bagged',
             'issue_number' => 'Issue Number',
             'author' => 'Book Author',
+            'borrower_id' => 'Borrower',
+            'lendable' => 'Lendable',
+            'borrower_fname' => 'Borrower First Name',
+            'borrower_lname' => 'Borrower Last Name',
         );
     }
 
@@ -104,7 +120,7 @@ class Book extends CActiveRecord{
 
         $criteria = new CDbCriteria;
 
-        $criteria->compare('id', $this->id, true);
+        $criteria->compare('t.id', $this->id, false);
         $criteria->compare('title', $this->title, true);
         $criteria->compare('type_id', $this->type_id, true);
         $criteria->compare('publication_date', $this->publication_date, true);
@@ -115,9 +131,27 @@ class Book extends CActiveRecord{
         $criteria->compare('grade_id', $this->grade_id, true);
         $criteria->compare('bagged', $this->bagged);
         $criteria->compare('issue_number', $this->issue_number, true);
+        $criteria->compare('lendable', ($this->lendable == "yes" ? 1 : ($this->lendable == "no" ? 0 : "")), true);
+        $criteria->compare('person.fname', $this->borrower_fname, true);
+        $criteria->compare('person.lname', $this->borrower_lname, true);
+        $criteria->with = array('borrower.person');
+
+        $sort = new CSort;
+        $sort->attributes = array(
+            'borrower_fname' => array(
+                'asc' => 'person.fname',
+                'desc' => 'person.fname DESC',
+            ),
+            'borrower_lname' => array(
+                'asc' => 'person.lname',
+                'desc' => 'person.lname DESC',
+            ),
+            '*',
+        );
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+            'sort'=>$sort,
         ));
     }
 
@@ -140,7 +174,6 @@ class Book extends CActiveRecord{
             $bookauthor = new BookAuthor();
             $bookauthor->book_id = $this->id;
             $bookauthor->author_id = $author->id;
-//            $bookauthor->save();
             return $bookauthor->save();
         }
         return false;
@@ -151,7 +184,34 @@ class Book extends CActiveRecord{
      */
     public function removeAuthor($author_id) {
         $pk = array('book_id' => $this->id, 'author_id' => $author_id);
-//        BookAuthor::model()->deleteByPk($pk);
         return BookAuthor::model()->deleteByPk($pk);
+    }
+
+    /**
+     * @param $data
+     * @param $row
+     * @return string
+     */
+    public function author_list($data, $row) {
+        $list = array();
+//        $count = 1;
+        foreach ($data->authors as $a) {
+            $list[] = $a->fname . ' ' . $a->lname;
+//            $count++;
+        }
+        return implode(", ", $list);
+    }
+
+    /**
+     * @param $data
+     * @param $row
+     * @return string
+     */
+    public function publisher_list($data, $row) {
+        $list = array();
+        foreach ($data->publishers as $a) {
+            $list[] = $a->name;
+        }
+        return implode(", ", $list);
     }
 }

@@ -83,8 +83,8 @@ class BController extends Controller{
         // $this->performAjaxValidation($model);
 
         // get object name from model
-        $objName = ucfirst($model->tableName());
-//        $objName = get_class($model);
+        // $objName = ucfirst($model->tableName());
+        $objName = get_class($model);
 
         if (isset($_POST[$objName])) {
             $model->attributes = $_POST[$objName];
@@ -114,7 +114,8 @@ class BController extends Controller{
         // $this->performAjaxValidation($model);
 
         // get object name from model
-        $objName = ucfirst($model->tableName());
+        // $objName = ucfirst($model->tableName());
+        $objName = get_class($model);
 
         if (isset($_POST[$objName])) {
             $model->attributes = $_POST[$objName];

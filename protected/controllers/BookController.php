@@ -1,6 +1,6 @@
 <?php
 
-class BookController extends BController {
+class BookController extends BController{
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
@@ -61,7 +61,7 @@ class BookController extends BController {
         $author = $this->createAuthor($model);
 
         // Uncomment the following line if AJAX validation is needed
-         $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if (isset($_POST['Book'])) {
             $model->attributes = $_POST['Book'];
@@ -82,29 +82,6 @@ class BookController extends BController {
         ));
     }
 
-    /**
-     * Updates a particular model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id the ID of the model to be updated
-     */
-    public function actionUpdate($id) {
-        $model = $this->loadModel($id);
-        $author = $this->createAuthor($model);
-
-        // Uncomment the following line if AJAX validation is needed
-         $this->performAjaxValidation($model);
-
-        if (isset($_POST['Book'])) {
-            $model->attributes = $_POST['Book'];
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
-        }
-
-        $this->render('update', array(
-            'model' => $model,
-            'author' => $author,
-        ));
-    }
 
     /**
      * Deletes a particular model.
@@ -123,7 +100,13 @@ class BookController extends BController {
      * Lists all models.
      */
     public function actionIndex() {
-        $dataProvider = new CActiveDataProvider('Book');
+        $criteria = new CDbCriteria();
+        $criteria->with = array('borrower.person');
+
+        $dataProvider = new CActiveDataProvider('Book', array(
+            'criteria' => $criteria,
+        ));
+
         $this->render('index', array(
             'dataProvider' => $dataProvider,
         ));
@@ -153,6 +136,7 @@ class BookController extends BController {
     public function loadModel($id) {
 //        $model = Book::model()->findByPk($id);
         $model = Book::model()->with('authors')->findByPk($id);
+        $this->set_fullname($model);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
@@ -170,6 +154,13 @@ class BookController extends BController {
     }
 
 
-
+    /**
+     * @param $model Book
+     */
+    public function set_fullname($model) {
+        if (!empty($model) && $model->borrower_id != null) {
+            $model->borrower_fullname = ($model->borrower->person->fname ? $model->borrower->person->fname . ' ' : '') . ($model->borrower->person->lname ? $model->borrower->person->lname : '');
+        }
+    }
 
 }

@@ -34,5 +34,8 @@ $this->menu=array(
         'grade.name',
         'signed',
 		'bagged',
+        'lendable',
+        'borrower_fullname',
+
 	),
 )); ?>
