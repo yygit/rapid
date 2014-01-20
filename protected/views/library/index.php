@@ -6,14 +6,22 @@
  * @var $dataProvider CActiveDataProvider
  */
 
+if (Yii::app()->user->hasFlash('success')) {
+    echo '<div class="flash-success">' . Yii::app()->user->getFlash('success') . '</div>';
+}
+if (Yii::app()->user->hasFlash('error')) {
+    echo '<div class="flash-error">' . Yii::app()->user->getFlash('error') . '</div>';
+}
+
 $this->widget('zii.widgets.grid.CGridView', array(
     'id' => 'book-grid',
     'dataProvider' => $dataProvider,
     'columns' => array(
+        'id',
         'title',
         'issue_number',
         array(
-            'name' => 'Type',
+            'name' => 'type',
             'value' => '$data->type->name',
         ),
         /*array(
@@ -31,6 +39,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
         ),
         'publication_date',
         array(
+            'name' => 'status',
+            'header' => 'Status',
+            'value' => array($dataProvider->model, 'get_status'),
+        ),
+        array(
             'class' => 'CButtonColumn',
             'template' => '{request}',
             'buttons' => array(
@@ -38,6 +51,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
                     'label' => 'Request',
                     'imageUrl' => Yii::app()->baseUrl . '/images/request_lozenge.png',
                     'url' => 'Yii::app()->createUrl("library/request", array("id"=>$data->id))',
+                    'visible' => array($dataProvider->model, 'requested'),
                 ),
             ),
         ),

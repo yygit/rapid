@@ -5,37 +5,37 @@
 
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
+    <?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id' => $data->id)); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('title')); ?>:</b>
-	<?php echo CHtml::encode($data->title); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('title')); ?>:</b>
+    <?php echo CHtml::encode($data->title); ?>
+    <br/>
 
     <b><?php echo CHtml::encode($data->getAttributeLabel('issue_number')); ?>:</b>
-	<?php echo CHtml::encode($data->issue_number); ?>
-	<br />
+    <?php echo CHtml::encode($data->issue_number); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('type_id')); ?>:</b>
-	<?php echo CHtml::encode($data->type_id); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('type_id')); ?>:</b>
+    <?php echo CHtml::encode($data->type_id); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('publication_date')); ?>:</b>
-	<?php echo CHtml::encode($data->publication_date); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('publication_date')); ?>:</b>
+    <?php echo CHtml::encode($data->publication_date); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('value')); ?>:</b>
-	<?php echo CHtml::encode($data->value); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('value')); ?>:</b>
+    <?php echo CHtml::encode($data->value); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('price')); ?>:</b>
-	<?php echo CHtml::encode($data->price); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('price')); ?>:</b>
+    <?php echo CHtml::encode($data->price); ?>
+    <br/>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('notes')); ?>:</b>
-	<?php echo CHtml::encode($data->notes); ?>
-	<br />
+    <b><?php echo CHtml::encode($data->getAttributeLabel('notes')); ?>:</b>
+    <?php echo CHtml::encode($data->notes); ?>
+    <br/>
 
     <b><?php echo CHtml::encode($data->getAttributeLabel('lendable')); ?>:</b>
     <?php echo CHtml::encode($data->lendable); ?>
@@ -43,25 +43,25 @@
 
     <?php
     echo "<b>" . CHtml::encode($data->getAttributeLabel('borrower')) . ":</b> ";
-    /*BookController::set_fullname($data);
-    echo CHtml::encode($data->borrower_fullname);*/
-    echo CHtml::encode($data->borrower ? $data->borrower->person->fname.' '. $data->borrower->person->lname : '');
+    // use CHtml::encode in Person model filter
+    echo $data->borrower ? $data->borrower->person->fname . ' ' . $data->borrower->person->lname . "&nbsp;" .
+        CHtml::link("Return", array("library/return", "book_id" => $data->id, "user_id" => $data->borrower_id)) : '';
     ?>
     <br/>
 
-	<?php /*
-	<b><?php echo CHtml::encode($data->getAttributeLabel('signed')); ?>:</b>
-	<?php echo CHtml::encode($data->signed); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('grade_id')); ?>:</b>
-	<?php echo CHtml::encode($data->grade_id); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('bagged')); ?>:</b>
-	<?php echo CHtml::encode($data->bagged); ?>
-	<br />
-
-	*/ ?>
+    <?php
+    if ($data->requesters) {
+        echo "<strong>Requests</strong>\n";
+        echo "<ul>\n";
+        foreach ($data->requesters as $r) {
+            echo "<li>" . CHtml::encode($r->person->fname . ' ' . $r->person->lname) . "&nbsp;" . CHtml::link("Lend",
+                    array("library/lend",
+                        "book_id" => $data->id,
+                        "user_id" => $r->id)) .
+                "</li>";
+        }
+        echo "</ul>\n";
+    }
+    ?>
 
 </div>

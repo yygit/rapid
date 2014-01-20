@@ -76,6 +76,8 @@ class Book extends CActiveRecord{
             'tags' => array(self::MANY_MANY, 'Tag', 'booktag(book_id, tag_id)'),
             'booktags' => array(self::HAS_MANY, 'BookTag', 'book_id'),
             'borrower' => array(self::BELONGS_TO, 'User', 'borrower_id'),
+            'requesters' => array(self::MANY_MANY, 'User', 'request(requester_id, book_id)', 'index' => 'id'),
+            'requests' => array(self::HAS_MANY, 'Request', 'book_id', 'index' => 'requester_id'),
         );
     }
 
@@ -137,6 +139,7 @@ class Book extends CActiveRecord{
         $criteria->with = array('borrower.person');
 
         $sort = new CSort;
+        $sort->defaultOrder = array('id' => CSort::SORT_ASC);
         $sort->attributes = array(
             'borrower_fname' => array(
                 'asc' => 'person.fname',
@@ -151,7 +154,7 @@ class Book extends CActiveRecord{
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
-            'sort'=>$sort,
+            'sort' => $sort,
         ));
     }
 
@@ -214,4 +217,29 @@ class Book extends CActiveRecord{
         }
         return implode(", ", $list);
     }
+
+    public function get_status($data, $row) {
+        $status = "Available";
+        if ($data->borrower_id != null) {
+            $status = "Checked Out";
+        }
+        if ($data->borrower_id == Yii::app()->user->getId()) {
+            $status = "You Have It";
+        }
+        return $status;
+    }
+
+    public function requested($row, $data) {
+        $me = Yii::app()->user->getId();
+        foreach ($data->requesters as $r) {
+            if ($r->id == $me) {
+                return false;
+            }
+        }
+        if ($data->borrower_id == $me) {
+            return false;
+        }
+        return true;
+    }
+
 }

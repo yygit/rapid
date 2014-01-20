@@ -30,6 +30,7 @@ class Person extends CActiveRecord{
             array('fname, lname', 'required'),
             array('fname, lname', 'length', 'max' => 64),
             array('fname, lname', 'filter', 'filter' => 'trim'),
+            array('fname, lname', 'filter', 'filter' => 'CHtml::encode'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
             array('id, fname, lname', 'safe', 'on' => 'search'),
