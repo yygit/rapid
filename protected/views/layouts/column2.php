@@ -11,7 +11,9 @@
 		$this->beginWidget('zii.widgets.CPortlet', array(
 			'title'=>'Operations',
 		));
-		$this->widget('application.components.AuthMenu', array(
+		$this->widget('application.components.YiiSmartMenu', array(
+//		$this->widget('application.components.AuthMenu', array(
+//		$this->widget('zii.widgets.CMenu', array(
 			'items'=>$this->menu,
 			'htmlOptions'=>array('class'=>'operations'),
 		));

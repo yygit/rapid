@@ -16,6 +16,7 @@ return array(
     'import' => array(
         'application.models.*',
         'application.components.*',
+        'application.modules.srbac.controllers.SBaseController',
     ),
 
     'modules' => array(
@@ -26,6 +27,29 @@ return array(
             // If removed, Gii defaults to localhost only. Edit carefully to taste.
             'ipFilters' => array('127.0.0.1', '::1'),
         ),
+        'srbac' => array(
+            'userclass' => 'User', //default: User
+            'userid' => 'id', //default: userid
+            'username' => 'username', //default:username
+            'delimeter' => '@', //default:-
+//            'debug' => true, //default :false
+            'pageSize' => 20, // default : 15
+            'superUser' => 'Authority', //default: Authorizer
+            'css' => 'srbac.css', //default: srbac.css
+            'layout' => 'application.views.layouts.main',
+            'notAuthorizedView' => 'srbac.views.authitem.unauthorized',
+            'alwaysAllowed' => array('SiteLogin', 'SiteLogout', 'SiteIndex', 'SiteError'),
+            'userActions' => array('Show', 'View', 'List'),
+            'listBoxNumberOfLines' => 15, //default : 10
+            'imagesPath' => 'srbac.images', // default: srbac.images
+            'imagesPack' => 'noia', //default: noia
+            'iconText' => true, // default : false
+            'header' => 'srbac.views.authitem.header',
+            'footer' => 'srbac.views.authitem.footer',
+            'showHeader' => true, // default: false
+            'showFooter' => true, // default: false
+            'alwaysAllowedPath' => 'srbac.components',
+        ),
 
     ),
 
@@ -34,6 +58,14 @@ return array(
         'user' => array(
             // enable cookie-based authentication
             'allowAutoLogin' => true,
+        ),
+        'authManager' => array(
+            // 'class' => 'CDbAuthManager',
+            'class' => 'application.modules.srbac.components.SDbAuthManager',
+            'connectionID' => 'db',
+            'assignmentTable' => 'auth_assignment',
+            'itemTable' => 'auth_item',
+            'itemChildTable' => 'auth_item_child',
         ),
         // uncomment the following to enable URLs in path-format
         'urlManager' => array(

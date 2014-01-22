@@ -3,7 +3,7 @@
 /* @var $model Book */
 
 $this->breadcrumbs = array(
-    'Books' => array('index'),
+    'Books' => array('book/'),
     'Manage',
 );
 

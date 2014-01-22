@@ -48,12 +48,12 @@
 
     <div id="mainmenu">
         <?php
-        $this->widget('application.components.AuthMenu', array(
+        $this->widget('application.components.YiiSmartMenu', array(
             'activeCssClass' => 'active',
             'activateParents' => true,
             'items' => array(
                 array('label' => 'Home', 'url' => array('/site/index'), 'visible' => true),
-                array('label' => 'Turn on mobile view', 'url' => array('', 'mobile'=>'on'), 'visible'=>'true'),
+                array('label' => 'Turn on mobile view', 'url' => array('', 'mobile' => 'on'), 'visible' => 'true'),
                 array(
                     'label' => 'Comic Books',
                     'url' => array('/book'),
@@ -61,15 +61,18 @@
                         array('label' => 'Publishers', 'url' => array('/publisher')),
                         array('label' => 'WishList', 'url' => array('/wish')),
                     ),
+                    'authItemName' => 'WishlistAccess',
                 ),
                 array('label' => 'Library', 'url' => array('/library')),
                 array('label' => 'Users', 'url' => array('/user')),
+                array('label' => 'Srbac', 'url' => array('/srbac'), 'authItemName' => 'Authority'),
                 array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
                 array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest),
             ),
         ));
         ?>
-    </div><!-- mainmenu -->
+    </div>
+    <!-- mainmenu -->
 
     <?php if (isset($this->breadcrumbs)): ?>
         <?php $this->widget('zii.widgets.CBreadcrumbs', array(

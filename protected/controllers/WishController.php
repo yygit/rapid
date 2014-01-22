@@ -13,7 +13,7 @@ class WishController extends BController{
      */
     public function filters() {
         return array(
-            'accessControl', // perform access control for CRUD operations
+//            'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request
             'ajaxOnly + claim', // only ajax requests
         );

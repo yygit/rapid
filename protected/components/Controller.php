@@ -3,7 +3,8 @@
  * Controller is the customized base controller class.
  * All controller classes for this application should extend from this base class.
  */
-class Controller extends CController{
+class Controller extends SBaseController{
+//class Controller extends CController{
     /**
      * @var string the default layout for the controller view. Defaults to '//layouts/column1',
      * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
@@ -25,6 +26,8 @@ class Controller extends CController{
      * Override beforeAction() to change to the mobile layout if URL param['mobile'] == 'on'
      */
     protected function beforeAction($action) {
+        if(!parent::beforeAction($action))
+            return false;
         $mobile = Yii::app()->getRequest()->getQuery('mobile');
         if ($mobile == 'on') {
             Yii::app()->user->setState('mobile', true);
