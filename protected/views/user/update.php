@@ -24,4 +24,5 @@ $this->menu=array(
 <?php $this->renderPartial('_form', array(
     'user'=>$user,
     'person' => $person,
+    'manageUser' => Yii::app()->user->checkAccess('manageUser'),
 )); ?>

@@ -105,6 +105,7 @@ class UserController extends Controller{
         $this->render('update', array(
             'user' => $user,
             'person' => $person,
+            'manageUser' => Yii::app()->user->checkAccess('manageUser'),
         ));
     }
 
@@ -232,6 +233,7 @@ class UserController extends Controller{
         } else
             throw new CHttpException(400, 'Invalid request.');
     }
+
 
 
 }

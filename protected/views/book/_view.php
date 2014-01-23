@@ -44,13 +44,13 @@
     <?php
     echo "<b>" . CHtml::encode($data->getAttributeLabel('borrower')) . ":</b> ";
     // use CHtml::encode in Person model filter
-    echo $data->borrower ? $data->borrower->person->fname . ' ' . $data->borrower->person->lname . "&nbsp;" .
-        CHtml::link("Return", array("library/return", "book_id" => $data->id, "user_id" => $data->borrower_id)) : '';
+    $link = $isAdmin ? CHtml::link("Return", array("library/return", "book_id" => $data->id, "user_id" => $data->borrower_id)) : '';
+    echo $data->borrower ? $data->borrower->person->fname . ' ' . $data->borrower->person->lname . "&nbsp;" . $link : '';
     ?>
     <br/>
 
     <?php
-    if ($data->requesters) {
+    if ($data->requesters && $isAdmin) {
         echo "<strong>Requests</strong>\n";
         echo "<ul>\n";
         foreach ($data->requesters as $r) {

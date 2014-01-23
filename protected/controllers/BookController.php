@@ -109,6 +109,7 @@ class BookController extends BController{
 
         $this->render('index', array(
             'dataProvider' => $dataProvider,
+            'isAdmin' => Yii::app()->user->checkAccess('admin'),
         ));
     }
 

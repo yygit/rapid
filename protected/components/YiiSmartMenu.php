@@ -11,8 +11,7 @@ Yii::import('zii.widgets.CMenu');
  * @version 0.3.1
  * @license New BSD Licence
  */
-class YiiSmartMenu extends CMenu
-{
+class YiiSmartMenu extends CMenu{
     /**
      * Defines what separator will be used to concat {module}, {controller} and
      * {authItemName}. Defaults to . (dot).
@@ -40,13 +39,11 @@ class YiiSmartMenu extends CMenu
      * @param array $items The menu items being filtered.
      * @return array The menu items with visibility defined by checkAccess().
      */
-    protected function filterItems(array $items){
-        foreach($items as $pos=>$item)
-        {
-            if(!isset($item['visible']))
-            {
-                $authItemName=$this->generateAuthItemNameFromItem($item);
-                $params=$this->compoundParams($item);
+    protected function filterItems(array $items) {
+        foreach ($items as $pos => $item) {
+            if (!isset($item['visible'])) {
+                $authItemName = $this->generateAuthItemNameFromItem($item);
+                $params = $this->compoundParams($item);
 
                 $allowedAccess = $authItemName == '#' ? true : Yii::app()->user->checkAccess($authItemName, $params);
                 $item['visible'] = $allowedAccess;
@@ -58,10 +55,10 @@ class YiiSmartMenu extends CMenu
              * If current item is visible and has sub items, loops recursively
              * on them.
              */
-            if(isset($item['items']) && $item['visible'])
-                $item['items']=$this->filterItems($item['items']);
+            if (isset($item['items']) && $item['visible'])
+                $item['items'] = $this->filterItems($item['items']);
 
-            $items[$pos]=$item;
+            $items[$pos] = $item;
         }
         return $items;
     }
@@ -82,26 +79,23 @@ class YiiSmartMenu extends CMenu
      *
      * @return string The auth item name generated.
      */
-    protected function generateAuthItemNameFromItem($item){
-        if(isset($item['authItemName']))
+    protected function generateAuthItemNameFromItem($item) {
+        if (isset($item['authItemName']))
             return $item['authItemName'];
-        else
-        {
-            if(isset($item['url']) && is_array($item['url']))
-                $url=$item['url'];
-            elseif(isset($item['linkOptions']['submit']) && is_array($item['linkOptions']['submit']))
-                $url=$item['linkOptions']['submit'];
-            else
+        else {
+            if (isset($item['url']) && is_array($item['url']))
+                $url = $item['url'];
+            elseif (isset($item['linkOptions']['submit']) && is_array($item['linkOptions']['submit']))
+                $url = $item['linkOptions']['submit']; else
                 return $item['url'];
 
-            $templateParts=array();
+            $templateParts = array();
 
             $module = $this->getController()->getModule() ? ($this->getController()->getModule()->getId()) : false;
             $controller = $this->getController()->id;
             $authItemName = trim($url[0], '/');
 
-            if($this->upperCaseFirstLetter)
-            {
+            if ($this->upperCaseFirstLetter) {
                 $module = ucfirst($module);
                 $controller = ucfirst($controller);
                 $authItemName = ucfirst($authItemName);
@@ -110,25 +104,23 @@ class YiiSmartMenu extends CMenu
             if (strpos($authItemName, '/') !== false) {
                 $parts = explode('/', $authItemName);
 
-                if($this->upperCaseFirstLetter){
+                if ($this->upperCaseFirstLetter) {
                     foreach ($parts as $i => $part)
                         $parts[$i] = ucfirst($part);
                 }
 
-                $numOfParts=count($parts);
-                if($numOfParts>2)
-                    $templateParts['{module}']=$parts[$numOfParts-3];
+                $numOfParts = count($parts);
+                if ($numOfParts > 2)
+                    $templateParts['{module}'] = $parts[$numOfParts - 3];
 
-                $templateParts['{controller}']=$parts[$numOfParts-2];
-                $templateParts['{action}']=$parts[$numOfParts-1];
-            }
-            else
-            {
-                if($module)
-                    $templateParts['{module}']=$module;
+                $templateParts['{controller}'] = $parts[$numOfParts - 2];
+                $templateParts['{action}'] = $parts[$numOfParts - 1];
+            } else {
+                if ($module)
+                    $templateParts['{module}'] = $module;
 
-                $templateParts['{controller}']=$controller;
-                $templateParts['{action}']=$authItemName;
+                $templateParts['{controller}'] = $controller;
+                $templateParts['{action}'] = $authItemName;
             }
 
             return implode($this->partItemSeparator, $templateParts);
@@ -147,15 +139,13 @@ class YiiSmartMenu extends CMenu
     protected function compoundParams($item) {
         if (isset($item['authParams']))
             return $item['authParams'];
-        else
-        {
+        else {
             /* If item has an url option and it has additional params */
             if (isset($item['url']) && is_array($item['url']) && count($item['url']) > 1)
                 return array_slice($item['url'], 1, null, true);
             /* Else if item has an submit option and it has addtionall params */
             elseif (isset($item['linkOptions']['submit']) && is_array($item['linkOptions']['submit']) && count($item['linkOptions']['submit']) > 1)
-                return array_slice($item['linkOptions']['submit'], 1, null, true);
-            else
+                return array_slice($item['linkOptions']['submit'], 1, null, true); else
                 return $_GET;
         }
     }
@@ -170,10 +160,10 @@ class YiiSmartMenu extends CMenu
      */
     protected function trace($item, $authItemName, $params, $allowedAccess) {
         $traceMessage = "Item {$item['label']} is " . ($allowedAccess ? '' : '*not* ') . "visible. ";
-        $traceMessage.= "You have " . ($allowedAccess ? '' : 'no ') . "permissions to $authItemName with params:\n";
+        $traceMessage .= "You have " . ($allowedAccess ? '' : 'no ') . "permissions to $authItemName with params:\n";
 
         foreach ($params as $name => $value)
-            $traceMessage.="> $name=$value \n";
+            $traceMessage .= "> $name=$value \n";
 
         Yii::trace($traceMessage, 'YiiSmartMenu');
     }

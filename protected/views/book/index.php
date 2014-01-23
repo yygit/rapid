@@ -1,6 +1,7 @@
 <?php
 /* @var $this BookController */
 /* @var $dataProvider CActiveDataProvider */
+/* @var $isAdmin boolean*/
 
 $this->breadcrumbs=array(
 	'Books',
@@ -16,5 +17,6 @@ $this->menu=array(
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
+	'viewData'=>array('isAdmin' => $isAdmin),
 	'itemView'=>'_view',
 )); ?>

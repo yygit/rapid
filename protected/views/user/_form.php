@@ -47,6 +47,7 @@
         <?php echo $form->error($user, 'password_repeat'); ?>
     </div>
 
+    <?php if ($manageUser) { ?>
     <div class="row">
         <b>Assignments</b><br/>
         <ul class="roles">
@@ -64,6 +65,7 @@
             ));
         ?>
     </div>
+    <?php } ?>
 
     <div class="row buttons">
         <?php echo CHtml::submitButton($user->isNewRecord ? 'Create' : 'Save'); ?>
