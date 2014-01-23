@@ -2,6 +2,9 @@
 /* @var $this UserController */
 /* @var $user User */
 
+Yii::app()->getClientScript()->registerCoreScript('jquery.ui');
+Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/user_form_ajax.js');
+
 $this->breadcrumbs=array(
 	'Users'=>array('index'),
 	$user->id=>array('view','id'=>$user->id),

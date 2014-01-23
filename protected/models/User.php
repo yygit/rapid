@@ -11,6 +11,7 @@
  *
  * The followings are the available model relations:
  * @property Person $person
+ * @property Assignments[] $assignments
  */
 class User extends CActiveRecord{
 
@@ -18,6 +19,7 @@ class User extends CActiveRecord{
     public $password_repeat;
     public $person_fname;
     public $person_lname;
+    public $role;
 
     /**
      * @return string the associated database table name
@@ -54,6 +56,7 @@ class User extends CActiveRecord{
         // class name for the relations automatically generated below.
         return array(
             'person' => array(self::BELONGS_TO, 'Person', 'person_id'),
+            'assignments' => array(self::HAS_MANY, 'Assignments', 'userid'),
         );
     }
 
@@ -163,5 +166,9 @@ class User extends CActiveRecord{
         if (!$valid)
             $this->addError($attribute, "Does not meet password requirements.");
         return $valid;
+    }
+
+    public function getUnassignedRoles() {
+        return Helper::getUserNotAssignedRoles($this->id);
     }
 }

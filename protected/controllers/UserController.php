@@ -25,7 +25,7 @@ class UserController extends Controller{
     public function accessRules() {
         return array(
             array('allow', // allow authenticated user
-                'actions' => array( 'aclist'),
+                'actions' => array('aclist'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin
@@ -95,7 +95,7 @@ class UserController extends Controller{
 
         if (isset($_POST['User'])) {
             $user->attributes = $_POST['User'];
-            if ($user->save()){
+            if ($user->save()) {
                 $person->attributes = $_POST['Person'];
                 $person->save();
                 $this->redirect(array('view', 'id' => $user->id));
@@ -118,7 +118,7 @@ class UserController extends Controller{
 
         $user = $this->loadModel($id);
         $person = $user->person;
-        if($user->delete()){
+        if ($user->delete()) {
             $person->delete();
         }
 
@@ -135,7 +135,7 @@ class UserController extends Controller{
         $this->layout = '//layouts/column1';
         $model = new User('search');
         $model->unsetAttributes(); // clear any default values
-        if (isset($_GET['User'])){
+        if (isset($_GET['User'])) {
             $model->attributes = $_GET['User'];
             /*var_dump($model->attributes);
             Yii::app()->end();*/
@@ -198,6 +198,40 @@ class UserController extends Controller{
         echo CJSON::encode($results);
     }
 
+    public function actionAssignRole($id) {
+        // request must be made via ajax
+        if (isset($_GET['ajax']) && isset($_GET['role'])) {
+            $model = $this->loadModel($id);
+            $auth = Yii::app()->authManager;
+            $role = Yii::app()->request->getParam('role');
+            $auth->assign($role, $id, '', '');
+            $role = Assignments::model()->find("itemname='" . $role . "'");
+            $this->renderPartial('//includes/role_li', array(
+                'user' => $model,
+                'assignment' => $role,
+            ), false, true);
+        } else
+            throw new CHttpException(400, 'Invalid request.');
+    }
+
+    public function actionRevokeRole($id) {
+        // request must be made via ajax
+        if (isset($_GET['ajax'])) {
+            $auth = Yii::app()->authManager;
+            $auth->revoke($_GET['role_name'], $id);
+        } else
+            throw new CHttpException(400, 'Invalid request.');
+    }
+
+    public function actionReloadRoles($id) {
+        if (isset($_GET['ajax'])) {
+            $model = $this->loadModel($id);
+            $this->renderPartial('//includes/role_select', array(
+                'user' => $model,
+            ), false, true);
+        } else
+            throw new CHttpException(400, 'Invalid request.');
+    }
 
 
 }

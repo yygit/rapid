@@ -47,6 +47,23 @@
         <?php echo $form->error($user, 'password_repeat'); ?>
     </div>
 
+    <div class="row">
+        <b>Assignments</b><br/>
+        <ul class="roles">
+            <?php foreach ($user->assignments as $a) {
+                echo $this->renderPartial('//includes/role_li',
+                    array(
+                        'user' => $user,
+                        'assignment' => $a,
+                    ));
+            } ?>
+        </ul>
+        <?php echo $this->renderPartial('//includes/role_select',
+            array(
+                'user' => $user,
+            ));
+        ?>
+    </div>
 
     <div class="row buttons">
         <?php echo CHtml::submitButton($user->isNewRecord ? 'Create' : 'Save'); ?>
@@ -54,4 +71,5 @@
 
     <?php $this->endWidget(); ?>
 
-</div><!-- form -->
+</div>
+<!-- form -->
