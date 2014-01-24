@@ -13,7 +13,7 @@
  * @property Person $person
  * @property Assignments[] $assignments
  */
-class User extends CActiveRecord{
+class User extends MyActiveRecord{
 
     public $password;
     public $password_repeat;
@@ -42,6 +42,7 @@ class User extends CActiveRecord{
             array('password', 'length', 'min' => 3, 'max' => 32),
             array('password', 'compare'),
             array('password', 'passwordStrengthOk', 'nonword' => false, 'allowEmpty' => true),
+//            array('password', 'passwordStrengthOk', 'nonword' => false, 'number' => false, 'capital' => false, 'allowEmpty' => true),
             array('password_repeat', 'safe'),
             array('username, password', 'filter', 'filter' => 'trim'),
             array('id, username, person_fname, person_lname', 'safe', 'on' => 'search'),
@@ -170,5 +171,11 @@ class User extends CActiveRecord{
 
     public function getUnassignedRoles() {
         return Helper::getUserNotAssignedRoles($this->id);
+    }
+
+    public function behaviors() {
+        return array(
+            'LoggableBehavior' => 'application.modules.auditTrail.behaviors.LoggableBehavior',
+        );
     }
 }

@@ -7,7 +7,7 @@
  * @property string $wish_id
  * @property string $author_id
  */
-class Wishauthor extends CActiveRecord
+class Wishauthor extends MyActiveRecord
 {
 	/**
 	 * @return string the associated database table name

@@ -19,7 +19,7 @@
  * @property Person[] $people
  * @property Publisher[] $publishers
  */
-class Wish extends CActiveRecord{
+class Wish extends MyActiveRecord {
     /**
      * @return string the associated database table name
      */

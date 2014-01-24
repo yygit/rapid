@@ -67,6 +67,7 @@
                 array('label' => 'Edit Profile', 'url' => array('/user/update', 'id' => Yii::app()->user->getId()), 'authItemName' => 'UpdateOwnUser', 'authParams' => array('id' => Yii::app()->user->getId())),
                 array('label' => 'Users', 'url' => array('/user'), 'authItemName' => 'manageUser'),
                 array('label' => 'Srbac', 'url' => array('/srbac'), 'authItemName' => 'Authority'),
+                array('label' => 'AuditTrail', 'url' => array('/auditTrail/admin'), 'authItemName' => 'Authority'),
                 array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
                 array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest),
             ),

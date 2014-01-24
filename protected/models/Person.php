@@ -12,7 +12,7 @@
  * @property Book[] $books
  * @property Book[] $books1
  */
-class Person extends CActiveRecord{
+class Person extends MyActiveRecord{
     /**
      * @return string the associated database table name
      */

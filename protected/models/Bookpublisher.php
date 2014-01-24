@@ -7,7 +7,7 @@
  * @property string $book_id
  * @property string $publisher_id
  */
-class Bookpublisher extends CActiveRecord
+class Bookpublisher extends MyActiveRecord
 {
 	/**
 	 * @return string the associated database table name

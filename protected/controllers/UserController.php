@@ -45,6 +45,7 @@ class UserController extends Controller{
     public function actionView($id) {
         $this->render('view', array(
             'model' => $this->loadModel($id),
+            'isAudit' => Yii::app()->user->checkAccess('auditTrail@AdminViewing'),
         ));
     }
 
@@ -77,6 +78,7 @@ class UserController extends Controller{
         $this->render('create', array(
             'user' => $user,
             'person' => $person,
+            'manageUser' => Yii::app()->user->checkAccess('manageUser'),
         ));
     }
 

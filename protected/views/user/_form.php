@@ -3,6 +3,7 @@
 /* @var $user User */
 /* @var $person Person */
 /* @var $form CActiveForm */
+/* @var $manageUser boolean*/
 ?>
 
 <div class="form">

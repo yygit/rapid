@@ -1,6 +1,7 @@
 <?php
 /* @var $this UserController */
 /* @var $model User */
+/* @var $isAudit boolean */
 
 /*$this->breadcrumbs=array(
 	'Users'=>array('index'),
@@ -32,4 +33,16 @@ $this->menu = array(
         'person.fname',
         'person.lname',
     ),
-)); ?>
+));
+
+if ($isAudit) {
+    echo '<br><br>';
+    $this->widget('application.modules.auditTrail.widgets.portlets.ShowAuditTrail', array(
+            'model' => $model,
+        )
+    );
+}
+
+
+
+?>

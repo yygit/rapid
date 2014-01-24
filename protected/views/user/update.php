@@ -1,6 +1,7 @@
 <?php
 /* @var $this UserController */
 /* @var $user User */
+/* @var $manageUser boolean*/
 
 Yii::app()->getClientScript()->registerCoreScript('jquery.ui');
 Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/user_form_ajax.js');
@@ -24,5 +25,5 @@ $this->menu=array(
 <?php $this->renderPartial('_form', array(
     'user'=>$user,
     'person' => $person,
-    'manageUser' => Yii::app()->user->checkAccess('manageUser'),
+    'manageUser' => $manageUser,
 )); ?>

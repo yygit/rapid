@@ -7,7 +7,7 @@
  * @property string $wish_id
  * @property string $illustrator_id
  */
-class Wishillustrator extends CActiveRecord
+class Wishillustrator extends MyActiveRecord
 {
 	/**
 	 * @return string the associated database table name

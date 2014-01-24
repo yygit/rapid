@@ -10,7 +10,7 @@
  * The followings are the available model relations:
  * @property Book[] $books
  */
-class Publisher extends CActiveRecord
+class Publisher extends MyActiveRecord
 {
 	/**
 	 * @return string the associated database table name

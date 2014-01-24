@@ -7,7 +7,7 @@
  * @property string $book_id
  * @property string $requester_id
  */
-class Request extends CActiveRecord{
+class Request extends MyActiveRecord {
     /**
      * @return string the associated database table name
      */

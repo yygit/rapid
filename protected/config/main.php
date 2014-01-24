@@ -17,6 +17,7 @@ return array(
         'application.models.*',
         'application.components.*',
         'application.modules.srbac.controllers.SBaseController',
+        'application.modules.auditTrail.models.AuditTrail',
     ),
 
     'modules' => array(
@@ -49,6 +50,11 @@ return array(
             'showHeader' => true, // default: false
             'showFooter' => true, // default: false
             'alwaysAllowedPath' => 'srbac.components',
+        ),
+        'auditTrail' => array(
+            'userClass' => 'User', // the class name for the user object, 'User' is default
+            'userIdColumn' => 'id', // the column name of the primary key for the user, 'id' is default
+            'userNameColumn' => 'username', // the column name of the primary key for the user, 'username' is default
         ),
 
     ),
