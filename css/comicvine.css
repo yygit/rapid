@@ -1,0 +1,74 @@
+.result_header {
+    text-align: center;
+    font-size: 150%;
+    text-decoration: underline;
+    width: 350px;
+    padding: 4px;
+}
+
+.result_name {
+    font-weight: bold;
+    float: left;
+    width: 250px;
+}
+
+.result_details {
+    float: left;
+    width: 100px;
+}
+
+.result_row {
+    float: left;
+    border-width: 1px;
+    border-color: #00a;
+    border-style: solid;
+    padding: 4px;
+}
+
+.clear_left {
+    clear: left;
+}
+
+.left_pagination {
+    float: left;
+    width: 100px;
+}
+
+.center_pagination {
+    font-weight: bold;
+    float: left;
+    width: 190px;
+}
+
+.right_pagination {
+    float: left;
+    width: 100px;
+}
+
+.pagination_row {
+    float: left;
+    padding: 4px;
+}
+
+.search_row {
+    border-width: 1px;
+    border-color: #0000aa;
+    border-style: solid;
+    padding: 4px;
+}
+
+.issue_number {
+    float: left;
+    width: 50px;
+}
+
+.issue_name {
+    float: left;
+    width: 250px;
+    font-weight: bold;
+}
+
+.issue_detail {
+    float: left;
+    width: 50px;
+}

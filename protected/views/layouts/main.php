@@ -67,7 +67,16 @@
                 array('label' => 'Edit Profile', 'url' => array('/user/update', 'id' => Yii::app()->user->getId()), 'authItemName' => 'UpdateOwnUser', 'authParams' => array('id' => Yii::app()->user->getId())),
                 array('label' => 'Users', 'url' => array('/user'), 'authItemName' => 'manageUser'),
                 array('label' => 'Srbac', 'url' => array('/srbac'), 'authItemName' => 'Authority'),
-                array('label' => 'Google+ Feed', 'url' => array('/gpf/index'), 'authItemName' => 'WishlistAccess'),
+                array(
+                    'label' => 'APIs',
+                    'url' => array('/'),
+                    'items' => array(
+                        array('label' => 'Google+ Feed', 'url' => array('/gpf/index'), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
+                        array('label' => 'Comic Vine', 'url' => array('/cv/index'), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
+                    ),
+                    'authItemName' => 'viewer',
+                    'linkOptions' => array('onclick' => 'return false;'),
+                ),
                 array('label' => 'AuditTrail', 'url' => array('/auditTrail/admin'), 'authItemName' => 'Authority'),
                 array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
                 array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest),
