@@ -34,6 +34,14 @@ class SiteTest extends WebTestCase{
             $this->clickAndWait("//a[contains(@href, '/rapid/site/logout')]");
         }
 
+        // ensure user management page is not accessible (when logged out)
+        $this->open('/rapid/user');
+        $this->assertElementNotPresent("//a[contains(@href, '/rapid/user')]");
+        $this->assertElementNotPresent("//div[@id='user-grid']/table//a[1]/img[contains(@src, 'assets')]");
+        $this->assertElementNotPresent("//div[@id='user-grid']/table//a[2]/img[contains(@src, 'assets')]");
+        $this->assertElementNotPresent("//div[@id='user-grid']/table//a[3]/img[contains(@src, 'assets')]");
+        $this->assertElementPresent("//form[@id='login-form']//input[@type='submit']");
+
         // test login process, including validation
         $this->assertElementPresent("//a[contains(@href, '/rapid/site/login')]");
         $this->clickAndWait("//a[contains(@href, '/rapid/site/login')]");

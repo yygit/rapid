@@ -1,0 +1,25 @@
+.floatleft {
+    float: left;
+    margin: 10px;
+}
+
+.bold {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.errormessage {
+    color: red;
+}
+
+.lose {
+    color: red;
+    font-weight: normal;
+    text-decoration: lowercase;
+    text-decoration: line-through;
+}
+
+.win {
+    color: green;
+    font-size: 200%;
+}

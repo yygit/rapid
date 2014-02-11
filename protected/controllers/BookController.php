@@ -164,4 +164,18 @@ class BookController extends BController{
         }
     }
 
+    /**
+     * generate titles for Hangman game in Json format
+     */
+    public function actionTitlelist() {
+        header('Content-type: application/json');
+        $books = Book::model()->findAll();
+        $ret = array();
+        foreach ($books as $book) {
+            $ret[] = $book['title'];
+        }
+        echo CJSON::encode($ret);
+        Yii::app()->end();
+    }
+
 }

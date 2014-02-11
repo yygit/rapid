@@ -77,6 +77,16 @@
                     'authItemName' => 'viewer',
                     'linkOptions' => array('onclick' => 'return false;'),
                 ),
+                array(
+                    'label' => 'Hangman',
+                    'url' => array('/'),
+                    'items' => array(
+                        array('label' => 'Create', 'url' => array('/hangman/create'), 'authItemName' => 'admin', 'itemOptions' => array('class' => 'item')),
+                        array('label' => 'Play', 'url' => array('/hangman/play', 'token'=>''), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
+                    ),
+                    'authItemName' => 'viewer',
+                    'linkOptions' => array('onclick' => 'return false;'),
+                ),
                 array('label' => 'AuditTrail', 'url' => array('/auditTrail/admin'), 'authItemName' => 'Authority'),
                 array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
                 array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest),

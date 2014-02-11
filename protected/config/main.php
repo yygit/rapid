@@ -39,7 +39,7 @@ return array(
             'css' => 'srbac.css', //default: srbac.css
             'layout' => 'application.views.layouts.main',
             'notAuthorizedView' => 'srbac.views.authitem.unauthorized',
-            'alwaysAllowed' => array('SiteLogin', 'SiteLogout', 'SiteIndex', 'SiteError'),
+            'alwaysAllowed' => array('SiteLogin', 'SiteLogout', 'SiteIndex', 'SiteError', 'SiteCaptcha'),
             'userActions' => array('Show', 'View', 'List'),
             'listBoxNumberOfLines' => 15, //default : 10
             'imagesPath' => 'srbac.images', // default: srbac.images
