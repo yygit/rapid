@@ -1,16 +1,16 @@
 <?php
 
 /**
- * HangmanToken class.
+ * TokenForm class.
  */
-class HangmanToken extends CFormModel{
+class TokenForm extends CFormModel{
     public $token;
 
     public function rules() {
         return array(
             array('token', 'required'),
             array('token', 'filter', 'filter' => 'trim'),
-            array('token', 'exist', 'className' => 'Hangman', 'attributeName' => 'token'),
+            array('token', 'exist', 'className' => 'Game', 'attributeName' => 'token'),
         );
     }
 

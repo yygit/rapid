@@ -1,6 +1,6 @@
 <?php
-/* @var $this HangmanController */
-/* @var $model HangmanToken */
+/* @var $this HangmanController|WroteitController */
+/* @var $model TokenForm */
 /* @var $form CActiveForm */
 ?>
 
@@ -9,12 +9,13 @@
 <div class="form">
 
     <?php $form = $this->beginWidget('CActiveForm', array(
-        'id' => 'hangman-token-form',
+        'id' => 'game-token-form',
         'enableAjaxValidation' => true,
         'enableClientValidation' => true,
         'clientOptions' => array(
             'validateOnSubmit' => true,
         ),
+        'focus'=>array($model,'token'),
     )); ?>
 
     <?php echo $form->errorSummary($model); ?>

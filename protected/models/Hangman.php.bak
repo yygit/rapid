@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'hangman':
  * @property string $id
- * @property string $title
+ * @property string $target
  * @property string $guessed
  * @property integer $fails
  * @property string $token
@@ -77,7 +77,7 @@ class Hangman extends CActiveRecord{
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id, true);
-        $criteria->compare('title', $this->title, true);
+        $criteria->compare('title', $this->target, true);
         $criteria->compare('guessed', $this->guessed, true);
         $criteria->compare('fails', $this->fails);
         $criteria->compare('token', $this->token, true);
@@ -105,8 +105,8 @@ class Hangman extends CActiveRecord{
     protected function titleAndGuessedToUpper() {
         if (!empty($this->guessed))
             $this->guessed = strtoupper($this->guessed);
-        if (!empty($this->title))
-            $this->title = strtoupper($this->title);
+        if (!empty($this->target))
+            $this->target = strtoupper($this->target);
         return true;
     }
 

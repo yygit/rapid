@@ -197,7 +197,13 @@ div.search-form {
     display: none;
 }
 
-#mainmenu li.item a { /*yy 20140123*/
+#mainmenu li.tall80 { /* yy */
+    height: 80px;
+}
+#mainmenu li.tall40 { /* yy */
+    height: 40px;
+}
+#mainmenu li.item a { /* yy 20140123*/
     color: #76bdcd;
 }
 

@@ -9,8 +9,12 @@
  * @property string $lname
  *
  * The followings are the available model relations:
- * @property Book[] $books
- * @property Book[] $books1
+ * @property Book[] $books model relation
+ * @property Book[] $bookauthors model relation
+ * @property Book[] $bookillustrators model relation
+ * @property Book[] $books1 model relation
+ *
+ * @method Person find
  */
 class Person extends MyActiveRecord{
     /**
@@ -44,8 +48,10 @@ class Person extends MyActiveRecord{
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'books' => array(self::MANY_MANY, 'Book', 'bookauthor(author_id, book_id)'),
-            'books1' => array(self::MANY_MANY, 'Book', 'bookillustrator(illustrator_id, book_id)'),
+            'books' => array(self::MANY_MANY, 'Book', 'bookauthor(author_id, book_id)', 'index' => 'id'), // books of this person as an author
+            'bookauthors' => array(self::HAS_MANY, 'Bookauthor', 'author_id'),
+            'bookillustrators' => array(self::HAS_MANY, 'Bookillustrator', 'illustrator_id'),
+            'books1' => array(self::MANY_MANY, 'Book', 'bookillustrator(illustrator_id, book_id)'), // books of this person as an illustrator
         );
     }
 
@@ -62,19 +68,9 @@ class Person extends MyActiveRecord{
 
     /**
      * Retrieves a list of models based on the current search/filter conditions.
-     *
-     * Typical usecase:
-     * - Initialize the model fields with values from filter form.
-     * - Execute this method to get CActiveDataProvider instance which will filter
-     * models according to data in model fields.
-     * - Pass data provider to CGridView, CListView or any similar widget.
-     *
-     * @return CActiveDataProvider the data provider that can return the models
-     * based on the search/filter conditions.
+     * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
     public function search() {
-        // Please modify the following code to remove attributes that should not be searched.
-
         $criteria = new CDbCriteria;
 
         $criteria->compare('id', $this->id, true);

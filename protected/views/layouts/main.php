@@ -71,18 +71,38 @@
                     'label' => 'APIs',
                     'url' => array('/'),
                     'items' => array(
-                        array('label' => 'Google+ Feed', 'url' => array('/gpf/index'), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
+                        array('label' => 'Google+ Feed', 'url' => array('/gpf/index'), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item tall40')),
                         array('label' => 'Comic Vine', 'url' => array('/cv/index'), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
                     ),
                     'authItemName' => 'viewer',
                     'linkOptions' => array('onclick' => 'return false;'),
                 ),
                 array(
-                    'label' => 'Hangman',
+                    'label' => 'Games',
                     'url' => array('/'),
                     'items' => array(
-                        array('label' => 'Create', 'url' => array('/hangman/create'), 'authItemName' => 'admin', 'itemOptions' => array('class' => 'item')),
-                        array('label' => 'Play', 'url' => array('/hangman/play', 'token'=>''), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
+                        array(
+                            'label' => 'Hangman',
+                            'url' => array('/'),
+                            'items' => array(
+                                array('label' => 'Create', 'url' => array('/hangman/create'), 'authItemName' => 'admin', 'itemOptions' => array('class' => 'item')),
+                                array('label' => 'Play', 'url' => array('/hangman/play', 'token' => ''), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
+                            ),
+                            'authItemName' => 'viewer',
+                            'itemOptions' => array('class' => 'item tall80'),
+                            'linkOptions' => array('onclick' => 'return false;'),
+                        ),
+                        array(
+                            'label' => 'Wrote It',
+                            'url' => array('/'),
+                            'items' => array(
+                                array('label' => 'Create', 'url' => array('/wroteit/create'), 'authItemName' => 'admin', 'itemOptions' => array('class' => 'item')),
+                                array('label' => 'Play', 'url' => array('/wroteit/play', 'token' => ''), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
+                            ),
+                            'authItemName' => 'viewer',
+                            'itemOptions' => array('class' => 'item'),
+                            'linkOptions' => array('onclick' => 'return false;'),
+                        ),
                     ),
                     'authItemName' => 'viewer',
                     'linkOptions' => array('onclick' => 'return false;'),
