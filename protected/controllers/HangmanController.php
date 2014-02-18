@@ -63,8 +63,6 @@ class HangmanController extends GameController{
     }
 
 
-
-
     /**
      * retrieves titles list, returns json decoded
      * @param string $url
@@ -91,6 +89,81 @@ class HangmanController extends GameController{
 //        fclose($f);
         curl_close($ch);
         return $titles;
+    }
+
+
+    /**
+     * @param $guesses string
+     * @param $title string
+     * @return bool
+     */
+    private function assessWin($guesses, $title) {
+        $guessArr = array();
+        foreach (preg_split('//u', mb_strtoupper($guesses, 'UTF-8'), 0, PREG_SPLIT_NO_EMPTY) as $letter) {
+            $guessArr[$letter] = true;
+        }
+        foreach (preg_split('//u', mb_strtoupper($title, 'UTF-8'), 0, PREG_SPLIT_NO_EMPTY) as $letter) {
+            if (!isset($guessArr[$letter]) && self::ctype_char_utf($letter)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * guess assessment - whether won or lost or neither. generate message;
+     * @param $hangman Game
+     * @param $title string
+     * @throws CDbException
+     */
+    protected function assessGuess($hangman, $title) {
+        if ($hangman->fails > 5) {
+            $this->lose = true;
+        } else {
+            $this->win = $this->assessWin($hangman->guessed, $hangman->target);
+            $getGuess = Yii::app()->request->getQuery('guess');
+            if (!($this->assessWin($hangman->guessed, $hangman->target)) && $getGuess) {
+                $guess = mb_strtoupper($getGuess, 'UTF-8');
+                if (mb_strlen($guess, 'UTF-8') == 1 && self::ctype_char_utf($guess) && !mb_stristr($hangman->guessed, $guess, false, 'UTF-8')) {
+                    if (!strstr($title, $guess)) {
+                        $hangman->fails++;
+                        if ($hangman->fails > 5) {
+                            $this->lose = true;
+                        }
+                    }
+                    $hangman->guessed .= $guess;
+                    $guessed = preg_split('//u', $hangman->guessed, 0, PREG_SPLIT_NO_EMPTY);
+                    sort($guessed);
+                    $hangman->guessed = implode($guessed);
+                    if (!$hangman->save()) {
+                        throw new CDbException('cannot save: ' . print_r($hangman->getErrors(), 1));
+                    }
+                    $this->win = $this->assessWin($hangman->guessed, $hangman->target);
+                } else {
+                    $this->message .= "Invalid guess. Please enter a single letter that hasn't already been guessed.";
+                }
+            }
+        }
+    }
+
+    /**
+     * find titles that are 8 or more chars long
+     * refine titles array
+     * @param $titles array
+     */
+    protected function refineTitles(&$titles) {
+        if ((!is_array($titles)) || (count($titles) == 0)) {
+            $this->errorAndEnd('create', 'No titles found fetching from the given URL');
+        }
+        for ($i = 0; $i < count($titles); $i++) {
+            if (strlen($titles[$i]) < 8) {
+                unset($titles[$i]);
+            }
+        }
+        if (count($titles) < 1) {
+            $this->errorAndEnd('create', 'No suitable titles found in database.');
+        }
+        $titles = array_merge($titles);
     }
 
 

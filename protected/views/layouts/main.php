@@ -82,26 +82,22 @@
                     'url' => array('/'),
                     'items' => array(
                         array(
-                            'label' => 'Hangman',
-                            'url' => array('/'),
-                            'items' => array(
-                                array('label' => 'Create', 'url' => array('/hangman/create'), 'authItemName' => 'admin', 'itemOptions' => array('class' => 'item')),
-                                array('label' => 'Play', 'url' => array('/hangman/play', 'token' => ''), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
-                            ),
+                            'label' => 'Play',
+                            'url' => array('/hangman/token'),
                             'authItemName' => 'viewer',
-                            'itemOptions' => array('class' => 'item tall80'),
-                            'linkOptions' => array('onclick' => 'return false;'),
+                            'itemOptions' => array('class' => 'item')
                         ),
                         array(
-                            'label' => 'Wrote It',
-                            'url' => array('/'),
-                            'items' => array(
-                                array('label' => 'Create', 'url' => array('/wroteit/create'), 'authItemName' => 'admin', 'itemOptions' => array('class' => 'item')),
-                                array('label' => 'Play', 'url' => array('/wroteit/play', 'token' => ''), 'authItemName' => 'viewer', 'itemOptions' => array('class' => 'item')),
-                            ),
-                            'authItemName' => 'viewer',
+                            'label' => 'Hangman - New Game',
+                            'url' => array('/hangman/create'),
+                            'authItemName' => 'admin',
+                            'itemOptions' => array('class' => 'item tall60'),
+                        ),
+                        array(
+                            'label' => 'WroteIt - New Game',
+                            'url' => array('/wroteit/create'),
+                            'authItemName' => 'admin',
                             'itemOptions' => array('class' => 'item'),
-                            'linkOptions' => array('onclick' => 'return false;'),
                         ),
                     ),
                     'authItemName' => 'viewer',

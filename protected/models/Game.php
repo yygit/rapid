@@ -18,14 +18,14 @@
  * @property integer $win
  *
  * The followings are the available model relations:
- * @property Book $bookDecoy3
  * @property GameType $gameType
  * @property Book $book
  * @property Person $author
  * @property Book $bookDecoy1
  * @property Book $bookDecoy2
+ * @property Book $bookDecoy3
  */
-class Game extends CActiveRecord{
+class Game extends MyActiveRecord{
     /**
      * @return string the associated database table name
      */
@@ -144,5 +144,19 @@ class Game extends CActiveRecord{
         if (!empty($this->target))
             $this->target = strtoupper($this->target);
         return true;
+    }
+
+    /**
+     * get Controller ID of the game ie 'hangman', 'wroteit', etc
+     * @param TokenForm $model
+     * @return string
+     * @throws CDbException
+     */
+    public static function getControllerId(TokenForm $model) {
+        /** @var $game Game */
+        $game = self::model()->with('gameType')->findByAttributes(array('token' => $model->token));
+        if (empty ($game))
+            throw new CDbException('no game found with this token');
+        return strtolower($game->gameType->devname);
     }
 }

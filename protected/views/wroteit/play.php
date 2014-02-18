@@ -1,4 +1,8 @@
 <?php
+/**
+ * @var $this WroteitController
+ * @var $game Game
+ */
 $this->breadcrumbs = array(
     'Wroteit' => array('/wroteit'),
     'Play',
@@ -9,6 +13,10 @@ if (isset($error)) {
     echo("<h1><center><u>WroteIt Error</u></center></h1><br />\n");
     echo("<h2>Error: $error</h2><br />\n");
 } else { //no $error
+    if (Yii::app()->user->checkAccess('admin')) {
+        var_dump($game->book->title);
+        var_dump($game->author->attributes);
+    }
     ?>
     <h1>
         <center><u>Welcome to WroteIt</u></center>

@@ -4,7 +4,8 @@
 /* @var $form CActiveForm */
 ?>
 
-<h1><?php echo $this->route; ?></h1>
+<!--<h1><?php /*echo $this->route; */?></h1>-->
+<h1>Enter token for the existing game</h1>
 
 <div class="form">
 

@@ -2,89 +2,52 @@
 
 class WroteitController extends GameController{
 
+    public $defaultAction = 'play';
     public $gameName = 'wroteit';
+    protected $win = false;
+    protected $lose = false;
+    protected $choices = array();
+    protected $answer = '';
 
     public function actionCreate() {
         $randbook = $this->selectRandomAuthorWithBook();
         $decoyIds = $this->selectThreeSuitableBooks($randbook['author_id']);
-//        $gameType = Gametype::model()->find('devname="wrote_it"');
         $wroteIt = new Game;
-        $wroteIt->token = $this->gameToken();
-//        $wroteIt->game_type_id = $gameType['id'];
+        $this->generateToken($wroteIt);
         $wroteIt->game_type_id = GameType::getTypeId($this->gameName);
         $wroteIt->book_id = $randbook['book_id'];
         $wroteIt->author_id = $randbook['author_id'];
         $wroteIt->book_decoy1_id = $decoyIds[0];
         $wroteIt->book_decoy2_id = $decoyIds[1];
         $wroteIt->book_decoy3_id = $decoyIds[2];
-//        $wroteIt->save();
         if ($wroteIt->save()) {
             $this->redirect(array('play', 'token' => $wroteIt->token));
         } else {
             $this->errorAndEnd(null, print_r($wroteIt->getErrors(), true));
         }
-//        $request = Yii::app()->request;
-//        $this->redirect($request->hostInfo . $request->baseUrl . '/index.php/wroteit/play?token=' . $wroteIt->token);
     }
 
-    public function actionIndex() {
-        $AuthorWithBook = $this->selectRandomAuthorWithBook();
-        $otherBooks = $this->selectThreeSuitableBooks($AuthorWithBook['author_id']);
-        var_dump($AuthorWithBook);
-        var_dump($otherBooks);
-        Yii::app()->end();
-        $this->render('index');
-    }
 
     public function actionPlay() {
-        $wroteIt = $this->evalTokenAndGetGame('wrote_it');
+        $wroteIt = $this->evalTokenAndGetGame();
+        $this->assessWin($wroteIt);
 
-        $win = false;
-        if (!$wroteIt->win && $wroteIt->fails == 0 && isset($_GET['guess'])) {
-            $guess = $_GET['guess'];
-            if (strlen($guess) != 0) {
-                if ($guess != $wroteIt->book_id) {
-                    $wroteIt->fails++;
-                } else {
-                    $win = true;
-                    $wroteIt->win = 1;
-                }
-                if (!$wroteIt->save())
-                    $this->errorAndEnd(null, print_r($wroteIt->getErrors(), true));
-            }
-        } elseif ($wroteIt->win) {
-            $win = true;
+        if (!$this->win && !$this->lose) {
+            $this->generateChoices($wroteIt);
+        } else {
+            $this->getAnswer($wroteIt);
         }
 
-        $ids = array(
-            $wroteIt->book_id, $wroteIt->book_decoy1_id,
-            $wroteIt->book_decoy2_id, $wroteIt->book_decoy3_id,
-        );
-        $criteria = new CDbCriteria;
-        $criteria->addInCondition('id', $ids);
-        $choices = array();
-        $author = Person::model()->find('id=:id', array('id' => $wroteIt->author_id));
-        $books = Book::model()->findAll($criteria);
-        shuffle($books);
-        foreach ($books as $book) {
-            $choices[] = array('id' => $book->id, 'title' => $book->title);
-        }
-        $answer = '';
-        $lose = false;
-        if ($wroteIt->fails > 0) {
-            $lose = true;
-        }
-        if ($win || $lose) {
-            $bookAnswer = Book::model()->find('id=:id', array('id' => $wroteIt->book_id));
-            $answer = $bookAnswer->title;
-        }
+        $author = $wroteIt->author;
+
         $this->render('play', array(
-            'choices' => $choices,
+            'choices' => $this->choices,
             'author' => $author['fname'] . ' ' . $author['lname'],
-            'win' => $win,
-            'lose' => $lose,
+            'win' => $this->win,
+            'lose' => $this->lose,
             'token' => $wroteIt->token,
-            'answer' => $answer,
+            'answer' => $this->answer,
+            'game' => $wroteIt,
         ));
     }
 
@@ -155,5 +118,60 @@ class WroteitController extends GameController{
             }
         }
         return $ret;
+    }
+
+    /**
+     * assess the guess, generate $this->win and $this->lose
+     * @param Game $wroteIt
+     */
+    private function assessWin(Game $wroteIt) {
+        $guess = Yii::app()->request->getQuery('guess');
+        if (!$wroteIt->win && !$wroteIt->fails && !empty($guess)) {
+            if ($guess != $wroteIt->book_id) {
+                $wroteIt->fails++;
+            } else {
+                $this->win = true;
+                $wroteIt->win = 1;
+            }
+            if (!$wroteIt->save())
+                $this->errorAndEnd(null, print_r($wroteIt->getErrors(), true));
+        }
+        if ($wroteIt->win) {
+            $this->win = true;
+        } elseif ($wroteIt->fails) {
+            $this->lose = true;
+        } else {
+            // neither win or lose
+        }
+    }
+
+    /**
+     * generate $this->choices
+     * @param $wroteIt Game
+     */
+    private function generateChoices($wroteIt) {
+        $books = array(
+            $wroteIt->book,
+            $wroteIt->bookDecoy1,
+            $wroteIt->bookDecoy2,
+            $wroteIt->bookDecoy3,
+        );
+        shuffle($books);
+        /** @var $book Book */
+        foreach ($books as $book) {
+            $this->choices[] = array('id' => $book->id, 'title' => $book->title);
+        }
+    }
+
+    /**
+     * generate $this->answer
+     * @param $wroteIt Game
+     * @throws CDbException
+     */
+    private function getAnswer($wroteIt) {
+        $bookAnswer = $wroteIt->book;
+        if (empty($bookAnswer))
+            throw new CDbException('no answer found');
+        $this->answer = $bookAnswer->title;
     }
 }

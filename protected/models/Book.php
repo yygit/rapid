@@ -26,7 +26,7 @@
  * @property Publisher[] $publishers
  * @property Tag[] $tags
  */
-class Book extends MyActiveRecord {
+class Book extends MyActiveRecord{
 
     public $borrower_fullname = '';
     public $borrower_fname;
