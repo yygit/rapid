@@ -18,6 +18,7 @@ return array(
         'application.components.*',
         'application.modules.srbac.controllers.SBaseController',
         'application.modules.auditTrail.models.AuditTrail',
+        'ext.quickdlgs.*',
     ),
 
     'modules' => array(

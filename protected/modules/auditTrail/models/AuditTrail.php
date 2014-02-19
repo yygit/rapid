@@ -93,7 +93,7 @@ class AuditTrail extends CActiveRecord{
         $criteria->compare('old_value', $this->old_value, true);
         $criteria->compare('new_value', $this->new_value, true);
         $criteria->compare('action', $this->action, true);
-        $criteria->compare('model', $this->model);
+        $criteria->compare('model', $this->model, true);
         $criteria->compare('field', $this->field, true);
         $criteria->compare('stamp', $this->stamp, true);
         $criteria->compare('user_id', $this->user_id);

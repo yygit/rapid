@@ -1,24 +1,24 @@
 <?php
-/**
- * @var $model AuditTrail
- */
+/* @var $this JobScheduledController */
+/* @var $model JobScheduled */
+
 $this->breadcrumbs=array(
-	'Audit Trails'=>array('/auditTrail'),
-	'Manage',
+	'Job Schedules',
 );
-/*
+
 $this->menu=array(
-	array('label'=>'List AuditTrail', 'url'=>array('index')),
-	array('label'=>'Create AuditTrail', 'url'=>array('create')),
+	array('label'=>'Create Job Schedule', 'url'=>array('create')),
+    array('label'=>'List Registered Jobs', 'url'=>array('job/index')),
+    array('label'=>'Register Job', 'url'=>array('job/create')),
 );
-*/
+
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();
 	return false;
 });
 $('.search-form form').submit(function(){
-	$.fn.yiiGridView.update('audit-trail-grid', {
+	$('#job-scheduled-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -26,13 +26,12 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Audit Trails</h1>
+<h1>Manage Job Schedules</h1>
 
-<p>
+<!--<p>
 You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
 or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
-
+</p>-->
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
@@ -41,21 +40,22 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'audit-trail-grid',
+	'id'=>'job-scheduled-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'old_value',
-		'new_value',
-		'action',
-		'model',
-		'field',
-		'stamp',
-		'user_id',
-		'model_id',
-//		array(
-//			'class'=>'CButtonColumn',
-//		),
+		'params',
+		'output',
+		'job_id',
+		'scheduled_time',
+		'started',
+		/*
+		'completed',
+		'active',
+		*/
+		array(
+			'class'=>'CButtonColumn',
+		),
 	),
 )); ?>
