@@ -16,9 +16,10 @@ return array(
     'import' => array(
         'application.models.*',
         'application.components.*',
-        'application.modules.srbac.controllers.SBaseController',
-        'application.modules.auditTrail.models.AuditTrail',
-        'ext.quickdlgs.*',
+        'application.modules.srbac.controllers.SBaseController', // RBAC graphic interface for setting operations, tasks, roles
+        'application.modules.auditTrail.models.AuditTrail', // traces changes in AR models
+        'ext.quickdlgs.*', // loads actions in modal windows
+        'ext.timepicker.*', // date and time picker; Based on http://trentrichardson.com/examples/timepicker/
     ),
 
     'modules' => array(

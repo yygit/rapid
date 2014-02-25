@@ -10,7 +10,7 @@
  * The followings are the available model relations:
  * @property Book[] $books
  */
-class Type extends MyActiveRecord {
+class Type extends SelectableActiveRecord {
     /**
      * @return string the associated database table name
      */
@@ -87,10 +87,6 @@ class Type extends MyActiveRecord {
      */
     public static function model($className = __CLASS__) {
         return parent::model($className);
-    }
-
-    public function getTypeOptions() {
-        return CMap::mergeArray(array('' => ''), CHtml::listData(Type::model()->findAll(), 'id', 'name'));
     }
 
 

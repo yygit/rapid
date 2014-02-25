@@ -10,7 +10,7 @@
  * The followings are the available model relations:
  * @property Book[] $books
  */
-class Grade extends MyActiveRecord {
+class Grade extends SelectableActiveRecord {
     /**
      * @return string the associated database table name
      */
@@ -89,7 +89,4 @@ class Grade extends MyActiveRecord {
         return parent::model($className);
     }
 
-    public function getTypeOptions() {
-        return CMap::mergeArray(array('' => ''), CHtml::listData(Grade::model()->findAll(), 'id', 'name'));
-    }
 }

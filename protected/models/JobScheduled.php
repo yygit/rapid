@@ -17,6 +17,9 @@
  * @property Job $job
  */
 class JobScheduled extends MyActiveRecord{
+
+    public $job_name;
+
     /**
      * @return string the associated database table name
      */
@@ -60,7 +63,8 @@ class JobScheduled extends MyActiveRecord{
             'id' => 'ID',
             'params' => 'Params',
             'output' => 'Output',
-            'job_id' => 'Job',
+            'job_id' => 'Job ID',
+            'job_name' => 'Job',
             'scheduled_time' => 'Scheduled Time',
             'started' => 'Started',
             'completed' => 'Completed',

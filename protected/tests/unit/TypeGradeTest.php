@@ -14,14 +14,19 @@ class TypeGradeTest extends CTestCase{
     }
 
     public function testTypeTypes() {
-        $options = Type::model()->getTypeOptions();
+        $options = Type::model()->getOptions();
         $this->assertTrue(is_array($options));
         $this->assertEquals(3+1, count($options));  // should be DB number + 1 (due to 'select' option)
     }
 
     public function testGradeTypes() {
-        $options = Grade::model()->getTypeOptions();
+        $options = Grade::model()->getOptions();
         $this->assertTrue(is_array($options));
         $this->assertEquals(8+1, count($options)); // should be DB number + 1 (due to 'select' option)
+    }
+    public function testJobTypes() {
+        $options = Job::model()->getOptions();
+        $this->assertTrue(is_array($options));
+        $this->assertEquals(3+1, count($options)); // should be DB number + 1 (due to 'select' option)
     }
 }

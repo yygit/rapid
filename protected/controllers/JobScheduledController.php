@@ -34,14 +34,14 @@ class JobScheduledController extends Controller{
         $model = new JobScheduled;
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+         $this->performAjaxValidation($model);
 
         if (isset($_POST['JobScheduled'])) {
             $model->attributes = $_POST['JobScheduled'];
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->id));
         }
-
+        $model->active = true;
         $this->render('create', array(
             'model' => $model,
         ));
@@ -56,7 +56,7 @@ class JobScheduledController extends Controller{
         $model = $this->loadModel($id);
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if (isset($_POST['JobScheduled'])) {
             $model->attributes = $_POST['JobScheduled'];
@@ -104,7 +104,7 @@ class JobScheduledController extends Controller{
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = JobScheduled::model()->findByPk($id);
+        $model = JobScheduled::model()->with('job')->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;
@@ -116,9 +116,11 @@ class JobScheduledController extends Controller{
      * @param string $formId
      */
     protected function performAjaxValidation($model, $formId = 'job-scheduled-form') {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === $formId) {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
+        if (Yii::app()->request->isAjaxRequest) {
+            if (isset($_POST['ajax']) && $_POST['ajax'] === $formId) {
+                echo CActiveForm::validate($model);
+                Yii::app()->end();
+            }
         }
     }
 }

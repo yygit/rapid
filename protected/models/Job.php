@@ -9,9 +9,10 @@
  * @property string $action
  *
  * The followings are the available model relations:
- * @property JobScheduled[] $jobScheduleds
+ * @property JobScheduled[] $jobsScheduled
  */
-class Job extends MyActiveRecord{
+//class Job extends MyActiveRecord{
+class Job extends SelectableActiveRecord{
     /**
      * @return string the associated database table name
      */
@@ -41,7 +42,7 @@ class Job extends MyActiveRecord{
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'jobScheduleds' => array(self::HAS_MANY, 'JobScheduled', 'job_id'),
+            'jobsScheduled' => array(self::HAS_MANY, 'JobScheduled', 'job_id'),
         );
     }
 

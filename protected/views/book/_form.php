@@ -44,7 +44,7 @@ Yii::app()->end();*/
 <div class="row">
     <?php echo $form->labelEx($model, 'type_id'); ?>
     <?php /*echo $form->textField($model,'type_id',array('size'=>10,'maxlength'=>10)); */ ?>
-    <?php echo $form->dropDownList($model, 'type_id', Type::model()->getTypeOptions()); ?>
+    <?php echo $form->dropDownList($model, 'type_id', Type::model()->getOptions()); ?>
     <?php echo $form->error($model, 'type_id'); ?>
 </div>
 
@@ -88,7 +88,7 @@ Yii::app()->end();*/
 <div class="row">
     <?php echo $form->labelEx($model, 'grade_id'); ?>
     <?php /*echo $form->textField($model, 'grade_id', array('size' => 10, 'maxlength' => 10)); */ ?>
-    <?php echo $form->dropDownList($model, 'grade_id', Grade::model()->getTypeOptions()); ?>
+    <?php echo $form->dropDownList($model, 'grade_id', Grade::model()->getOptions()); ?>
     <?php echo $form->error($model, 'grade_id'); ?>
 </div>
 
