@@ -14,7 +14,11 @@
  * @property integer $active
  *
  * The followings are the available model relations:
- * @property Job $job
+ * @property Job $job model relation
+ *
+ * model scopes
+ * @method JobScheduled active() model scope
+ * @method JobScheduled current() model scope
  */
 class JobScheduled extends MyActiveRecord{
 
@@ -52,6 +56,17 @@ class JobScheduled extends MyActiveRecord{
         // class name for the relations automatically generated below.
         return array(
             'job' => array(self::BELONGS_TO, 'Job', 'job_id'),
+        );
+    }
+
+    public function scopes() {
+        return array(
+            'active' => array(
+                'condition' => 'active=1 AND completed IS NULL',
+            ),
+            'current' => array(
+                'condition' => 'scheduled_time < now()',
+            ),
         );
     }
 
@@ -97,6 +112,8 @@ class JobScheduled extends MyActiveRecord{
         $criteria->compare('started', $this->started, true);
         $criteria->compare('completed', $this->completed, true);
         $criteria->compare('active', $this->active);
+
+//        $criteria->scopes = array('active', 'current');
 
         $sort = new CSort;
         $sort->defaultOrder = array('id' => CSort::SORT_ASC);

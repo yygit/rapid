@@ -24,6 +24,9 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
+Yii::app()->clientScript->registerScript('disableClick', "
+    $('input:checkbox[name=active]').bind('click', false);
+");
 ?>
 
 <h1>Manage Job Schedules</h1>
@@ -54,16 +57,23 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         ),
         'scheduled_time',
         'started',
+        'completed',
         /*
         'completed',
         */
         array(
+            'name' => 'active',
+            'value' => 'CHtml::checkBox("active", $data->active)',
+            'type' => 'raw',
+            'filter' => array(1 => 'yes', 0 => 'no'),
+        ),
+        /*array(
             'class' => 'CCheckBoxColumn',
             'id' => 'active',
             'header' => 'Active',
             'checked' => '$data->active',
             'selectableRows' => 0,
-        ),
+        ),*/
         array(
             'class' => 'CButtonColumn',
         ),
