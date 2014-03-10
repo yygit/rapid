@@ -107,7 +107,7 @@ class JobController extends Controller{
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = Job::model()->findByPk($id);
+        $model = Job::model()->with('jobsScheduled')->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;

@@ -34,14 +34,49 @@ class JobProcessorCommand extends CConsoleCommand{
 
     private function SendWishlist($params = '', $logMsg = '') {
         if ($this->sendEmail('noleafclover2007@gmail.com', '<nebazori@gmail.com>', mb_substr($logMsg, 0, 40, 'utf8'), $logMsg)) {
-            return 'done';
+            return null;
         }
     }
 
-    private function RunReport($params = '', $logMsg = '') {
-        sleep(2);
-        return;
+    private function RunReport() {
+        $criteria = new CDbCriteria();
+        $criteria = array(
+            'select' => 'count(grade_id) as num_grade, grade_id',
+            'with' => array('grade'),
+            'group' => 'grade_id',
+        );
+        $books = Book::model()->findAll($criteria);
+
+        // initialize report
+        $report = array(
+            'data' => array(
+                array(
+                    'label' => 'Comic Books by Grade',
+                    'data' => array(),
+                    'bars' => array(
+                        'show' => true,
+                        'align' => 'center',
+                    ),
+                ),
+            ),
+            'options' => array(
+                'legend' => array(
+                    'show' => false,
+                ),
+            ),
+            'htmlOptions' => array(
+                'style' => 'width:200px;height:200px;'
+            )
+        );
+
+        foreach ($books as $book) {
+            $report['data'][0]['data'][] = array($book->grade_id, $book->num_grade);
+            $report['options']['xaxis']['ticks'][] = array($book->grade_id, $book->grade->name);
+        }
+
+        return $report;
     }
+
 
     private function SendCert($params = '', $logMsg = '') {
         sleep(2);
@@ -88,4 +123,6 @@ class JobProcessorCommand extends CConsoleCommand{
 //            mail($to, $subject, $message, implode("\r\n", $headers));
         return true;
     }
+
+
 }

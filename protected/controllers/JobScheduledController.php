@@ -21,8 +21,10 @@ class JobScheduledController extends Controller{
      * @param integer $id the ID of the model to be displayed
      */
     public function actionView($id) {
+        $model = $this->loadModel($id);
         $this->render('view', array(
-            'model' => $this->loadModel($id),
+            'model' => $model,
+            'isPlot' => (boolean)json_decode($model->output),
         ));
     }
 
@@ -34,7 +36,7 @@ class JobScheduledController extends Controller{
         $model = new JobScheduled;
 
         // Uncomment the following line if AJAX validation is needed
-         $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if (isset($_POST['JobScheduled'])) {
             $model->attributes = $_POST['JobScheduled'];

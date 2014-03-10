@@ -20,6 +20,7 @@ return array(
         'application.modules.auditTrail.models.AuditTrail', // traces changes in AR models
         'ext.quickdlgs.*', // loads actions in modal windows
         'ext.timepicker.*', // date and time picker; Based on http://trentrichardson.com/examples/timepicker/
+        'ext.EFlot.*', // Javascript plotting library for jQuery.
     ),
 
     'modules' => array(

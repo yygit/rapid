@@ -31,6 +31,7 @@ class Book extends MyActiveRecord{
     public $borrower_fullname = '';
     public $borrower_fname;
     public $borrower_lname;
+    public $num_grade;
 
     /**
      * @return string the associated database table name

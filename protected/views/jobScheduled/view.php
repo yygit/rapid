@@ -1,6 +1,7 @@
 <?php
 /* @var $this JobScheduledController */
 /* @var $model JobScheduled */
+/* @var $isPlot boolean */
 
 $this->breadcrumbs = array(
     'Job Scheduleds' => array('index'),
@@ -32,4 +33,11 @@ $this->menu = array(
             'value' => $model->active ? 'true' : 'false',
         ),
     ),
-)); ?>
+));
+
+if (!empty($model->output) && !empty($isPlot)) {
+    $this->widget('ext.EFlot.EFlotGraphWidget', json_decode($model->output, true));
+}
+
+
+?>

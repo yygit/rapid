@@ -42,7 +42,8 @@ class Job extends SelectableActiveRecord{
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'jobsScheduled' => array(self::HAS_MANY, 'JobScheduled', 'job_id'),
+//            'jobsScheduled' => array(self::HAS_MANY, 'JobScheduled', 'job_id'),
+            'jobsScheduled' => array(self::HAS_MANY, 'JobScheduled', array('job_id' => 'id')),
         );
     }
 

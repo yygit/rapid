@@ -26,7 +26,7 @@ $('.search-form form').submit(function(){
 ");
 Yii::app()->clientScript->registerScript('disableClick', "
     $('input:checkbox[name=active]').bind('click', false);
-");
+",CClientScript::POS_END);
 ?>
 
 <h1>Manage Job Schedules</h1>
@@ -43,6 +43,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
+    'afterAjaxUpdate' => 'function(id, data){$("input:checkbox[name=active]").bind("click", false);}',
     'id' => 'job-scheduled-grid',
     'dataProvider' => $model->search(),
     'filter' => $model,
@@ -78,4 +79,5 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
             'class' => 'CButtonColumn',
         ),
     ),
-)); ?>
+));
+?>
