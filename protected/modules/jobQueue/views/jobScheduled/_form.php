@@ -37,7 +37,7 @@
 
     <div class="row">
         <?php echo $form->labelEx($model, 'scheduled_time'); ?>
-        <?php $this->widget('ext.timepicker.timepicker', array(
+        <?php $this->widget('jobQueue.extensions.timepicker.timepicker', array(
             'model' => $model,
             'name' => 'scheduled_time',
             'options' => array(

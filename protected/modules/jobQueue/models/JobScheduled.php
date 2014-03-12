@@ -44,7 +44,7 @@ class JobScheduled extends MyActiveRecord{
             array('params, output, scheduled_time, started, completed', 'safe'),
             // The following rule is used by search().
             // @todo Please remove those attributes that should not be searched.
-            array('id, params, output, job_id, scheduled_time, started, completed, active', 'safe', 'on' => 'search'),
+            array('id, params, output, job_id, job_name, scheduled_time, started, completed, active', 'safe', 'on' => 'search'),
         );
     }
 
@@ -105,19 +105,28 @@ class JobScheduled extends MyActiveRecord{
 
         $criteria = new CDbCriteria;
 
-        $criteria->compare('id', $this->id, true);
+        $criteria->compare('t.id', $this->id, true);
         $criteria->compare('params', $this->params, true);
         $criteria->compare('output', $this->output, true);
         $criteria->compare('job_id', $this->job_id, true);
+        $criteria->compare('job.name', $this->job_name, true);
         $criteria->compare('scheduled_time', $this->scheduled_time, true);
         $criteria->compare('started', $this->started, true);
         $criteria->compare('completed', $this->completed, true);
         $criteria->compare('active', $this->active);
+        $criteria->with = array('job');
 
 //        $criteria->scopes = array('active', 'current');
 
         $sort = new CSort;
-        $sort->defaultOrder = array('id' => CSort::SORT_ASC);
+        $sort->defaultOrder = array('id' => CSort::SORT_DESC);
+        $sort->attributes = array(
+            'job_name' => array(
+                'asc' => 'job.name ASC',
+                'desc' => 'job.name DESC',
+            ),
+            '*',
+        );
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

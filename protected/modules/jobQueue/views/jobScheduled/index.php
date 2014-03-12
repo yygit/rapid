@@ -7,9 +7,9 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => 'Create Job Schedule', 'url' => array('create')),
-    array('label' => 'List Registered Jobs', 'url' => array('job/index')),
-    array('label' => 'Register Job', 'url' => array('job/create')),
+    array('label' => 'Create Job Schedule', 'url' => array('jobScheduled/create'), 'authItemName' => 'jobQueue@JobScheduledCreate'),
+    array('label' => 'List Registered Jobs', 'url' => array('job/index'), 'authItemName' => 'jobQueue@JobIndex'),
+    array('label' => 'Register Job', 'url' => array('job/create'), 'authItemName' => 'jobQueue@JobCreate'),
 );
 
 Yii::app()->clientScript->registerScript('search', "

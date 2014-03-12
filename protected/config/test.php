@@ -3,7 +3,10 @@
 return CMap::mergeArray(
 	require(dirname(__FILE__).'/main.php'),
 	array(
-		'components'=>array(
+        'import' => array(
+            'application.modules.jobQueue.models.*', // running job queues unit test
+        ),
+        'components'=>array(
 			'fixture'=>array(
 				'class'=>'system.test.CDbFixtureManager',
 			),

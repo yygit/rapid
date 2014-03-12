@@ -8,7 +8,7 @@ $this->breadcrumbs = array(
 
 $this->menu = array(
 //    array('label' => 'Create Job', 'url' => array('create')),
-    array('label' => 'Job Schedules', 'url' => array('jobScheduled/index')),
+    array('label' => 'Job Schedules', 'url' => array('jobScheduled/index'), 'authItemName' => 'jobQueue@JobScheduledIndex'),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -43,7 +43,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
     <?php
     EQuickDlgs::iframeButton(
         array(
-            'controllerRoute' => 'create',
+            'controllerRoute' => 'jobQueue/job/create',
             'dialogTitle' => 'Create item',
             'dialogWidth' => 600,
             'dialogHeight' => 400,
@@ -70,11 +70,15 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         array(
             'class' => 'EJuiDlgsColumn',
             'updateDialog' => array(
+                'controllerRoute' => 'jobQueue/job/update',
+                'actionParams' => array('id' => '$data->id'),
                 'dialogWidth' => 580,
                 'dialogHeight' => 270,
                 'contentWrapperHtmlOptions' => array('style' => 'height:210px;'),
             ),
             'viewDialog' => array(
+                'controllerRoute' => 'jobQueue/job/view',
+                'actionParams' => array('id' => '$data->id'),
                 'dialogWidth' => 580,
                 'dialogHeight' => 250,
             ),

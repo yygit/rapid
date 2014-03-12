@@ -18,9 +18,10 @@ return array(
         'application.components.*',
         'application.modules.srbac.controllers.SBaseController', // RBAC graphic interface for setting operations, tasks, roles
         'application.modules.auditTrail.models.AuditTrail', // traces changes in AR models
-        'ext.quickdlgs.*', // loads actions in modal windows
-        'ext.timepicker.*', // date and time picker; Based on http://trentrichardson.com/examples/timepicker/
-        'ext.EFlot.*', // Javascript plotting library for jQuery.
+//        'application.modules.jobQueue.*',
+//        'ext.quickdlgs.*', // loads actions in modal windows
+//        'ext.timepicker.*', // date and time picker; Based on http://trentrichardson.com/examples/timepicker/
+//        'ext.EFlot.*', // Javascript plotting library for jQuery.
     ),
 
     'modules' => array(
@@ -59,7 +60,7 @@ return array(
             'userIdColumn' => 'id', // the column name of the primary key for the user, 'id' is default
             'userNameColumn' => 'username', // the column name of the primary key for the user, 'username' is default
         ),
-
+        'jobQueue' => array(),
     ),
 
     // application components

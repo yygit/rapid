@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Jobs', 'url'=>array('index')),
+	array('label'=>'List Jobs', 'url'=>array('job/index')),
     array('label' => 'Job Schedules', 'url' => array('jobScheduled/index')),
 );
 ?>

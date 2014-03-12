@@ -29,7 +29,7 @@ class SiteTest extends WebTestCase{
     public function testLoginLogout() {
         $this->open('');
         // ensure the user is logged out
-        if ($this->isElementPresent("//a[contains(@href, '/rapid/site/logout')]")){
+        if ($this->isElementPresent("//a[contains(@href, '/rapid/site/logout')]")) {
             $this->assertElementPresent("//a[contains(@href, '/rapid/site/logout')]");
             $this->clickAndWait("//a[contains(@href, '/rapid/site/logout')]");
         }
@@ -61,5 +61,35 @@ class SiteTest extends WebTestCase{
         $this->clickAndWait("//a[contains(@href, '/rapid/site/logout')]");
         $this->assertTextPresent('regexpi:login');
         $this->assertElementPresent("//a[contains(@href, '/rapid/site/login')]");
+    }
+
+    public function testJobSchedulesPage() {
+        $this->open('');
+
+        /*ensure the user is logged in*/
+        if ($this->isElementPresent("//a[contains(@href, '/rapid/site/login')]")) {
+            $this->assertElementPresent("//a[contains(@href, '/rapid/site/login')]");
+            $this->clickAndWait("//a[contains(@href, '/rapid/site/login')]");
+            $this->assertElementPresent('name=LoginForm[username]');
+            $this->type('name=LoginForm[username]', 'admin');
+            $this->type('name=LoginForm[password]', 'admin');
+            $this->clickAndWait("//form[@id='login-form']//input[@type='submit']");
+            $this->assertElementPresent("//a[contains(@href, '/rapid/site/logout')]");
+        }
+
+        $this->open('/rapid/jobQueue/jobScheduled/index');
+        /*ensure the page title is proper*/
+        $this->assertTitle("regexpi:.*schedule.*");
+        /*ensure the page header h1 is proper*/
+        $this->assertText("//div[@id='content']/h1", "regexpi:.*schedule.*");
+
+        /*test filter for id=1*/
+        $this->assertElementPresent("//div[@id='job-scheduled-grid']//input[@name='JobScheduled[id]']");
+        $this->type("//div[@id='job-scheduled-grid']//input[@name='JobScheduled[id]']", '1');
+        $this->keyDown("//div[@id='job-scheduled-grid']//input[@name='JobScheduled[id]']", '\13');
+        $this->pause(2000);
+        $this->assertElementPresent("//div[@id='job-scheduled-grid']/table/tbody/tr[1]/td[1]");
+        $this->assertText("//div[@id='job-scheduled-grid']/table/tbody/tr[1]/td[1]", 'regexpi:.*1.*');
+        $this->assertNotText("//div[@id='job-scheduled-grid']/table/tbody/tr[1]/td[1]", 'regexpi:.*2.*');
     }
 }

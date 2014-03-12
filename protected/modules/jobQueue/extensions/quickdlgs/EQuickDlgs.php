@@ -91,7 +91,8 @@ class EQuickDlgs
     const URLPARAM_CLOSEONACTION = 'qdsCloseDialog';
     const URLPARAM_HIDETITLEBAR = 'qdsHideTitle';
 
-    const EXTINSTALLDIR = 'ext.quickdlgs';
+//    const EXTINSTALLDIR = 'ext.quickdlgs';
+    const EXTINSTALLDIR = 'jobQueue.extensions.quickdlgs';
 
 
     /**

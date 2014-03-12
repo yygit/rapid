@@ -38,7 +38,8 @@ abstract class EFlotWidget extends CWidget
 	{
 		if($this->scriptUrl===null || $this->themeUrl===null)
 		{
-			$basePath=Yii::getPathOfAlias('application.extensions.EFlot.assets');
+//			$basePath=Yii::getPathOfAlias('application.extensions.EFlot.assets');
+			$basePath=Yii::getPathOfAlias('jobQueue.extensions.EFlot.assets');
 			$baseUrl=Yii::app()->getAssetManager()->publish($basePath);
 			if($this->scriptUrl===null)
 				$this->scriptUrl=$baseUrl.'';

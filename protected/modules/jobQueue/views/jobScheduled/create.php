@@ -8,8 +8,7 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List JobScheduled', 'url'=>array('index')),
-	array('label'=>'Manage JobScheduled', 'url'=>array('admin')),
+	array('label'=>'List JobScheduled', 'url'=>array('index'), 'authItemName' => 'jobQueue@JobScheduledIndex'),
 );
 ?>
 

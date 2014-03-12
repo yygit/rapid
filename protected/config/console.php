@@ -13,6 +13,7 @@ return array(
         'application.models.*',
         'application.components.*',
         'application.modules.auditTrail.models.AuditTrail', // traces changes in AR models
+        'application.modules.jobQueue.models.*', // running job queues
     ),
     /*application components*/
     'components' => array(
@@ -65,11 +66,12 @@ return array(
             'SMTPSecure' => 'tls',
         ),
     ),
-    /*'modules' => array(
-        'auditTrail' => array(
+    'modules' => array(
+        /*'auditTrail' => array(
             'userClass' => 'User', // the class name for the user object, 'User' is default
             'userIdColumn' => 'id', // the column name of the primary key for the user, 'id' is default
             'userNameColumn' => 'username', // the column name of the primary key for the user, 'username' is default
-        ),
-    ),*/
+        ),*/
+        'jobQueue' => array(),
+    ),
 );

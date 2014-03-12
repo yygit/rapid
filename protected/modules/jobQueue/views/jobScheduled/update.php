@@ -9,10 +9,9 @@ $this->breadcrumbs = array(
 );
 
 $this->menu = array(
-    array('label' => 'List JobScheduled', 'url' => array('index')),
-    array('label' => 'Create JobScheduled', 'url' => array('create')),
-    array('label' => 'View JobScheduled', 'url' => array('view', 'id' => $model->id)),
-    array('label' => 'Manage JobScheduled', 'url' => array('admin')),
+    array('label' => 'List JobScheduled', 'url' => array('index'), 'authItemName' => 'jobQueue@JobScheduledIndex'),
+    array('label' => 'Create JobScheduled', 'url' => array('create'), 'authItemName' => 'jobQueue@JobScheduledCreate'),
+    array('label' => 'View JobScheduled', 'url' => array('view', 'id' => $model->id), 'authItemName' => 'jobQueue@JobScheduledView'),
 );
 ?>
 

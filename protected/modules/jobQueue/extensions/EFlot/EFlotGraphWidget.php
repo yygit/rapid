@@ -12,7 +12,8 @@
  * and Qiang Xue <qiang.xue@gmail.com>
  */
 
-Yii::import('application.extensions.EFlot.EFlotWidget');
+//Yii::import('application.extensions.EFlot.EFlotWidget');
+Yii::import('jobQueue.extensions.EFlot.EFlotWidget');
 
 /**
  * CEFlotGraphWidget displays a flot graph.
